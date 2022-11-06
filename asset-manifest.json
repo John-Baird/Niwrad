@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Niwrad/static/css/main.073c9b0a.css",
+    "main.js": "/Niwrad/static/js/main.7a806f47.js",
+    "static/js/787.65858a54.chunk.js": "/Niwrad/static/js/787.65858a54.chunk.js",
+    "index.html": "/Niwrad/index.html",
+    "main.073c9b0a.css.map": "/Niwrad/static/css/main.073c9b0a.css.map",
+    "main.7a806f47.js.map": "/Niwrad/static/js/main.7a806f47.js.map",
+    "787.65858a54.chunk.js.map": "/Niwrad/static/js/787.65858a54.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.7a806f47.js"
+  ]
+}
