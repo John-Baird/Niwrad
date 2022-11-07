@@ -51,16 +51,19 @@ const spriteSpeedIntensifier = 1
 // This multiplies all the sprite's jump force
 const jumpForce = 1
 
+// This is the pause
+
+let pause = true
 
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name}){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 150, width = 50, reset}){
     this.position = position
     this.velocity = velocity
     this.name = name
-    this.width = 50
-    this.height = 150
+    this.width = width
+    this.height = height
     this.lastKey = 'key'
     this.speed = (speed * spriteSpeedIntensifier)
     this.attackBox = {
@@ -79,6 +82,7 @@ class Sprite {
     this.canJump = true
     this.canMoveLeft = true
     this.canMoveRight = true
+    //this.reset = reset
   }
     //Draws out sprites and attack boxes
   draw() {
@@ -141,6 +145,15 @@ class Sprite {
       this.isAttacking = false
     }, 100)
   }
+
+
+
+  restart(){
+    
+    //this.reset everything
+    
+    
+  }
 }
 
 
@@ -169,6 +182,8 @@ const player = new Sprite({
 })
 
 
+
+
 // Making a new enemy
 
 // Start position
@@ -191,9 +206,51 @@ const enemy = new Sprite({
     x: -50,
     y: 0
   },
-  name: 'enemy'
+  name: 'enemy',
+})
+
+
+
+
+//canvas.width = 1024;
+//canvas.height = 576;
+
+
+//Making player HP bar
+const playerBar = new Sprite({
+  position:{
+    x: canvas.width*0.05,
+    y: canvas.height*0.05
+  },
+  velocity:{
+    x: 0,
+    y: 0
+  },
+  color: 'darkred',
+  width: canvas.width*0.4,
+  height: canvas.height*0.05
 
 })
+
+
+
+//Making enemy HP bar
+const enemyBar = new Sprite({
+  position:{
+    x: (canvas.width*.6)-(canvas.width*0.05),
+    y: canvas.height*0.05
+  },
+  velocity:{
+    x: 0,
+    y: 0
+  },
+  color: 'darkblue',
+  width: canvas.width*0.4,
+  height: canvas.height*0.05,
+  
+
+})
+
 
 
 
@@ -239,79 +296,129 @@ function rectangularCollision({rectangle1, rectangle2}){
 // This is the infinite loop
 
 function animate(){
-
   // Reseting the simulation
   window.requestAnimationFrame(animate)
-  c.fillStyle = 'black'
-  c.fillRect(0,0, canvas.width, canvas.height)
-  player.update()
-  enemy.update()
-  player.velocity.x = 0;
-  enemy.velocity.x = 0;
-  
-  
-  // Making sure that the last key pressed is the direction the player is moving
-  // Setting velocity direction (left - right)
-  if(player.canMoveLeft){
-    if (keys.a.pressed && player.lastKey === 'a'){
-      player.velocity.x = (-1 * player.speed)
+  if (pause){
+    c.fillStyle = 'black'
+    c.fillRect(0,0, canvas.width, canvas.height)
+    player.update()
+    enemy.update()
+    playerBar.draw()
+    enemyBar.draw()
+    player.velocity.x = 0;
+    enemy.velocity.x = 0;
+    
+    
+    // Making sure that the last key pressed is the direction the player is moving
+    // Setting velocity direction (left - right)
+    if(player.canMoveLeft){
+      if (keys.a.pressed && player.lastKey === 'a'){
+        player.velocity.x = (-1 * player.speed)
+      }
+    }
+    if(player.canMoveRight){
+      if (keys.d.pressed && player.lastKey === 'd'){
+        player.velocity.x = (1 * player.speed)
+      }
+    }
+
+
+    // Making sure that the last key pressed is the direction the enemy is moving
+    // Setting velocity direction (left - right) 
+    // stops when out of bounds
+    if(enemy.canMoveLeft){
+      if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
+        enemy.velocity.x = (-1 * enemy.speed)
+      }
+    }
+    if(enemy.canMoveRight){
+      if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
+        enemy.velocity.x = (1 * enemy.speed)
+      }
+    }
+
+
+
+    // detect for collision between attackBox and body
+
+    if(
+      rectangularCollision({
+      rectangle1: player,
+      rectangle2: enemy
+    }) &&
+      player.isAttacking
+      ){
+        player.isAttacking = false
+      console.log("player attack sucessful")
+      if (enemyBar.width > pEnemyWidth){
+        enemyBar.width -= pEnemyWidth
+        enemyBar.position.x += pEnemyWidth
+        console.log(enemyBar.width)
+      }
+      
+    }
+
+    if(rectangularCollision({
+      rectangle1: enemy,
+      rectangle2: player,
+    }) &&
+      enemy.isAttacking
+      ){
+        enemy.isAttacking = false
+      console.log("enemy attack sucessful")
+      if (playerBar.width > pBarWidth){
+        playerBar.width -= pBarWidth
+        console.log(playerBar.width)
+      }
+      
     }
   }
-  if(player.canMoveRight){
-    if (keys.d.pressed && player.lastKey === 'd'){
-      player.velocity.x = (1 * player.speed)
-    }
-  }
-
-
-// Making sure that the last key pressed is the direction the enemy is moving
-// Setting velocity direction (left - right) 
-// stops when out of bounds
-if(enemy.canMoveLeft){
-  if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
-    enemy.velocity.x = (-1 * enemy.speed)
-  }
-}
-if(enemy.canMoveRight){
-  if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
-    enemy.velocity.x = (1 * enemy.speed)
-  }
-}
-
-
-
-  // detect for collision between attackBox and body
-
-  if(
-    rectangularCollision({
-    rectangle1: player,
-    rectangle2: enemy
-  }) &&
-     player.isAttacking
-     ){
-      player.isAttacking = false
-    console.log("player attack sucessful")
-  }
-
-  if(rectangularCollision({
-    rectangle1: enemy,
-    rectangle2: player,
-  }) &&
-     enemy.isAttacking
-     ){
-      enemy.isAttacking = false
-    console.log("enemy attack sucessful")
-  }
-
 
 }
 
 // Starting the simulation
 animate()
+const pBarWidth = playerBar.width*.1
+const pEnemyWidth = enemyBar.width*.1
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Checking for keydown events
 window.addEventListener('keydown', (event) => {
+
+  
+  switch (event.key){
+    // This is the pause
+
+    case 'Escape':
+      if (pause){
+        pause = false 
+      }
+      else{
+        pause = true
+      }
+      break
+      
+    case ' ':
+        if (pause){
+          //enemy.restart()
+          //player.restart()
+          //playerBar.restart()
+          //enemyBar.restart()
+        }
+      break
+  }
+  if (pause){
   switch (event.key){
 
     // player keys - setting the current downkey to last key pressed
@@ -372,12 +479,19 @@ window.addEventListener('keydown', (event) => {
 
   // Debug - Logging out which key went down
   //console.log(event.key)
+}
 })
 
 
 // Checking for keyup events
 window.addEventListener('keyup', (event) => {
+
+  
   switch (event.key){
+
+    
+
+
     // player
     // Switching off current key
     // Switching the last key pressed to the opposite just incase
@@ -409,6 +523,7 @@ window.addEventListener('keyup', (event) => {
 
     case 'ArrowDown':
       enemy.canAttack = true
+      
       break
 
     
@@ -416,4 +531,5 @@ window.addEventListener('keyup', (event) => {
 
   // Debug - Logging out which key went up
   console.log(event.key + " keyup")
+
 })
