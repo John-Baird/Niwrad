@@ -41,7 +41,7 @@ canvas.height = 576;
 c.fillRect(0,0,canvas.width,canvas.height)
 
 
-
+let timer = 60
 // Gravity 
 const gravity = .6
 
@@ -82,7 +82,7 @@ class Sprite {
     this.canJump = true
     this.canMoveLeft = true
     this.canMoveRight = true
-    this.score = 0
+    this.alive = true
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
@@ -105,55 +105,61 @@ class Sprite {
 
       
   update(){
-    this.draw()
-    this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-    this.attackBox.position.y = this.position.y
-    c.fillText(player.score,canvas.width/2.2, 10)
-    c.fillText(enemy.score,canvas.width/1.8, 10)
-
-
-    //Score
+    if(this.alive){
+      this.draw()
+      this.attackBox.position.x = this.position.x + this.attackBox.offset.x
+      this.attackBox.position.y = this.position.y
+  
+      c.fillStyle = 'white'
+      c.fillText(timer,canvas.width/2, 40)
+      
+  
+  
+      //Score
+  
+      
+  
+      // Implements gravity and makes sure it doesn't fall through the ground
+      this.position.x += this.velocity.x
+      this.position.y += this.velocity.y
+  
+      if (this.position.y + this.height + this.velocity.y >= canvas.height){
+        this.velocity.y = 0;
+        this.canJump = true;
+      } 
+      else{
+        this.velocity.y += gravity
+      }
+      if (this.position.x + this.width >= canvas.width ){
+        console.log(this.name +" is out of bounds right")
+        this.canMoveRight = false
+      }
+      else{
+        this.canMoveRight = true
+      }
+      if (this.position.x <= 0){
+        console.log(this.name +" out of bounds left")
+        this.canMoveLeft = false
+      }
+      else{
+        this.canMoveLeft = true
+      }
+  
+      
+    }
+  
+  }
+    //attack lasts .1 seconds
+    attack() {
+      this.isAttacking = true
+      this.canAttack = false
+      setTimeout(() => {
+        this.isAttacking = false
+      }, 100)
+    }
 
     
 
-    // Implements gravity and makes sure it doesn't fall through the ground
-    this.position.x += this.velocity.x
-    this.position.y += this.velocity.y
-
-    if (this.position.y + this.height + this.velocity.y >= canvas.height){
-      this.velocity.y = 0;
-      this.canJump = true;
-    } 
-    else{
-      this.velocity.y += gravity
-    }
-    if (this.position.x + this.width >= canvas.width ){
-      console.log(this.name +" is out of bounds right")
-      this.canMoveRight = false
-    }
-    else{
-      this.canMoveRight = true
-    }
-    if (this.position.x <= 0){
-      console.log(this.name +" out of bounds left")
-      this.canMoveLeft = false
-    }
-    else{
-      this.canMoveLeft = true
-    }
-
-    
-  }
-
-
-  //attack lasts .1 seconds
-  attack() {
-    this.isAttacking = true
-    this.canAttack = false
-    setTimeout(() => {
-      this.isAttacking = false
-    }, 100)
-  }
 
 
 
@@ -360,6 +366,7 @@ function animate(){
         enemyBar.position.x += pEnemyWidth
         if(enemyBar.width < 0){
           enemyBar.width = 0
+          enemy.alive = false
         }
         
       }
@@ -378,11 +385,14 @@ function animate(){
         playerBar.width -= pBarWidth
         if(playerBar.width < 0){
           playerBar.width = 0
+          player.alive = false
         }
       }
       
     }
   }
+
+
 
 }
 
@@ -393,9 +403,24 @@ const pEnemyWidth = enemyBar.width*.1
 
 
 
+a()
 
+function a(){
+setInterval(oneSecondFunction, 1000);
+};
 
+function oneSecondFunction() {
 
+if (timer<=0){
+  
+}
+else{
+  if(player.alive && enemy.alive){
+    timer--
+  }
+  
+}
+}
 
 
 
@@ -429,7 +454,8 @@ window.addEventListener('keydown', (event) => {
       break
   }
   if (pause){
-  switch (event.key){
+    if(player.alive){
+        switch (event.key){
 
     // player keys - setting the current downkey to last key pressed
 
@@ -459,33 +485,37 @@ window.addEventListener('keydown', (event) => {
       break
 
   }
-  switch (event.key){
+    }
+    if(enemy.alive){
+      switch (event.key){
 
-    //enemy keys - setting the current downkey to last key pressed
-    case 'ArrowRight':
-      keys.ArrowRight.pressed = true
-      enemy.lastKey = 'ArrowRight'
-      enemy.attackBox.offset.x = 0
-    break
-    case 'ArrowLeft':
-      keys.ArrowLeft.pressed = true
-      enemy.lastKey = 'ArrowLeft'
-      enemy.attackBox.offset.x = -50
-    break
-    case 'ArrowUp':
-      if(enemy.canJump){
-        enemy.velocity.y = (-20 * jumpForce)
-        enemy.canJump = false
+        //enemy keys - setting the current downkey to last key pressed
+        case 'ArrowRight':
+          keys.ArrowRight.pressed = true
+          enemy.lastKey = 'ArrowRight'
+          enemy.attackBox.offset.x = 0
+        break
+        case 'ArrowLeft':
+          keys.ArrowLeft.pressed = true
+          enemy.lastKey = 'ArrowLeft'
+          enemy.attackBox.offset.x = -50
+        break
+        case 'ArrowUp':
+          if(enemy.canJump){
+            enemy.velocity.y = (-20 * jumpForce)
+            enemy.canJump = false
+          }
+          
+        break
+        case 'ArrowDown':
+          console.log(enemy.canAttack)
+          if (enemy.canAttack){
+            enemy.attack()
+          }
+        break
       }
-      
-    break
-    case 'ArrowDown':
-      console.log(enemy.canAttack)
-      if (enemy.canAttack){
-        enemy.attack()
-      }
-    break
-  }
+    }
+  
 
   // Debug - Logging out which key went down
   //console.log(event.key)
