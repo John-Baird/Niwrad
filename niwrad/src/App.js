@@ -643,3 +643,64 @@ window.addEventListener('keyup', (event) => {
   console.log(event.key + " keyup")
 
 })
+
+
+// create the network
+const synaptic = require('synaptic');
+
+const Layer = synaptic.Layer;
+const Network = synaptic.Network;
+
+const inputLayer = new Layer(4);
+const hiddenLayer = new Layer(3);
+const outputLayer = new Layer(1);
+
+inputLayer.project(hiddenLayer);
+hiddenLayer.project(outputLayer);
+
+const myNetwork = new Network({
+  input: inputLayer,
+  hidden: [hiddenLayer],
+  output: outputLayer,
+});
+
+var learningRate = .3;
+for (var i = 0; i < 2000; i++)
+{
+
+	myNetwork.activate([0,0,0,0]);
+	myNetwork.propagate(learningRate, [0]);
+
+	myNetwork.activate([1,0,0,0]);
+	myNetwork.propagate(learningRate, [1]);
+
+  myNetwork.activate([1,1,0,0]);
+	myNetwork.propagate(learningRate, [0]);
+
+  myNetwork.activate([1,1,1,0]);
+	myNetwork.propagate(learningRate, [1]);
+
+  
+	myNetwork.activate([1,1,1,1]);
+	myNetwork.propagate(learningRate, [0]);
+
+	myNetwork.activate([0,0,0,1]);
+	myNetwork.propagate(learningRate, [1]);
+
+  myNetwork.activate([0,0,1,1]);
+	myNetwork.propagate(learningRate, [0]);
+
+  myNetwork.activate([0,1,1,1]);
+	myNetwork.propagate(learningRate, [1]);
+
+}
+
+console.log('NN1', myNetwork.activate([0,0,0,0]));
+console.log('NN2', myNetwork.activate([1,0,0,0]));
+console.log('NN3', myNetwork.activate([1,1,0,0]));
+console.log('NN4', myNetwork.activate([1,1,1,0]));
+console.log('NN5', myNetwork.activate([1,1,1,1]));
+console.log('NN6', myNetwork.activate([0,0,0,1]));
+console.log('NN7', myNetwork.activate([0,0,1,1]));
+console.log('NN8', myNetwork.activate([0,1,1,1]));
+
