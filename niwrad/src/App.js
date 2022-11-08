@@ -58,7 +58,7 @@ let pause = true
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 150, width = 50, reset}){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 150, width = 50, }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -82,6 +82,7 @@ class Sprite {
     this.canJump = true
     this.canMoveLeft = true
     this.canMoveRight = true
+    this.score = 0
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
@@ -89,6 +90,7 @@ class Sprite {
     // Drawing out red sprites
     c.fillStyle = this.color
     c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    
 
     //Drawing out sprite attack boxes
 
@@ -106,7 +108,14 @@ class Sprite {
     this.draw()
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x
     this.attackBox.position.y = this.position.y
+    c.fillText(player.score,canvas.width/2.2, 10)
+    c.fillText(enemy.score,canvas.width/1.8, 10)
+
+
+    //Score
+
     
+
     // Implements gravity and makes sure it doesn't fall through the ground
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
@@ -148,12 +157,7 @@ class Sprite {
 
 
 
-  restart(){
-    
-    //this.reset everything
-    
-    
-  }
+
 }
 
 
@@ -350,13 +354,17 @@ function animate(){
       ){
         player.isAttacking = false
       console.log("player attack sucessful")
-      if (enemyBar.width > pEnemyWidth){
+      if (enemyBar.width >= pEnemyWidth-1){
+        
         enemyBar.width -= pEnemyWidth
         enemyBar.position.x += pEnemyWidth
-        console.log(enemyBar.width)
+        if(enemyBar.width < 0){
+          enemyBar.width = 0
+        }
+        
       }
       
-    }
+    } 
 
     if(rectangularCollision({
       rectangle1: enemy,
@@ -366,9 +374,11 @@ function animate(){
       ){
         enemy.isAttacking = false
       console.log("enemy attack sucessful")
-      if (playerBar.width > pBarWidth){
+      if (playerBar.width >= pBarWidth-1){ 
         playerBar.width -= pBarWidth
-        console.log(playerBar.width)
+        if(playerBar.width < 0){
+          playerBar.width = 0
+        }
       }
       
     }
