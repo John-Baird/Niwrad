@@ -41,7 +41,7 @@ canvas.height = 576;
 c.fillRect(0,0,canvas.width,canvas.height)
 
 
-let timer = 60
+let timer = 10
 // Gravity 
 const gravity = .6
 
@@ -83,6 +83,7 @@ class Sprite {
     this.canMoveLeft = true
     this.canMoveRight = true
     this.alive = true
+    this.score = 0
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
@@ -126,6 +127,7 @@ class Sprite {
       if (this.position.y + this.height + this.velocity.y >= canvas.height){
         this.velocity.y = 0;
         this.canJump = true;
+        
       } 
       else{
         this.velocity.y += gravity
@@ -308,7 +310,7 @@ function rectangularCollision({rectangle1, rectangle2}){
 function animate(){
   // Reseting the simulation
   window.requestAnimationFrame(animate)
-  if (pause){
+  
     c.fillStyle = 'black'
     c.fillRect(0,0, canvas.width, canvas.height)
     player.update()
@@ -390,7 +392,7 @@ function animate(){
       }
       
     }
-  }
+  
 
 
 
@@ -401,18 +403,58 @@ animate()
 const pBarWidth = playerBar.width*.1
 const pEnemyWidth = enemyBar.width*.1
 
+let rpBarWidth = playerBar.width
+let reBarWidth = enemyBar.width
+
+function restart(){
+  
+    c.fillStyle = 'black'
+    c.fillRect(0,0, canvas.width, canvas.height)
+    playerBar.width = rpBarWidth
+    enemyBar.width = reBarWidth
+    player.alive = true
+    enemy.alive = true
+    player.position.y = 0
+    player.position.x = 10
+    enemy.position.y = 100
+    enemy.position.x = 400
+    player.canJump = false
+    enemy.canJump = false
+    player.velocity.x = 0
+    player.velocity.y = 0
+    enemy.velocity.x = 0
+    enemy.velocity.y = 0
+    enemyBar.position.x = (canvas.width*.6)-(canvas.width*0.05)
+    player.canAttack = false
+    enemy.canAttack = false
+    timer = 10
+    pause = true
+    startTimer()
+    
+  
+    
+  
+
+}
+
+startTimer()
 
 
-a()
+  
+function startTimer(){
+  startTimer.stop1 = setInterval(oneSecondFunction, 1000)
+  
+}
 
-function a(){
-setInterval(oneSecondFunction, 1000);
-};
+  
+
 
 function oneSecondFunction() {
 
 if (timer<=0){
-  
+      pause = false
+      clearInterval(startTimer.stop1)
+      DownHP()
 }
 else{
   if(player.alive && enemy.alive){
@@ -422,6 +464,36 @@ else{
 }
 }
 
+
+function DownHP(){
+    let stop2 = setInterval(function(){
+      if(enemy.alive && player.alive){
+        enemyBar.width -= pEnemyWidth
+        enemyBar.position.x += pEnemyWidth
+        playerBar.width -= pBarWidth
+      
+        if(playerBar.width < 0){
+          playerBar.width = 0
+          player.alive = false
+          enemy.score++
+          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
+          clearInterval(stop2)
+          restart()
+        }
+        if(enemyBar.width < 0){
+          enemyBar.width = 0
+          enemy.alive = false
+          player.score++
+          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
+          clearInterval(stop2)
+          restart()
+        
+      }
+      }
+    },300)
+
+
+}
 
 
 
@@ -435,21 +507,19 @@ window.addEventListener('keydown', (event) => {
   switch (event.key){
     // This is the pause
 
-    case 'Escape':
-      if (pause){
-        pause = false 
-      }
-      else{
-        pause = true
-      }
-      break
+    //case 'Escape':
+    //  if (pause){
+    //    pause = false 
+    //  }
+    //  else{
+    //    pause = true
+    //  }
+    //  break
       
     case ' ':
         if (pause){
-          //enemy.restart()
-          //player.restart()
-          //playerBar.restart()
-          //enemyBar.restart()
+
+          restart()
         }
       break
   }
