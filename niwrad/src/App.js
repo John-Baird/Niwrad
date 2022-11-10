@@ -41,7 +41,7 @@ canvas.height = 576;
 c.fillRect(0,0,canvas.width,canvas.height)
 
 
-let timer = 10
+let timer = 100
 // Gravity 
 const gravity = .6
 
@@ -135,6 +135,7 @@ class Sprite {
       if (this.position.x + this.width >= canvas.width ){
         console.log(this.name +" is out of bounds right")
         this.canMoveRight = false
+        
       }
       else{
         this.canMoveRight = true
@@ -142,6 +143,7 @@ class Sprite {
       if (this.position.x <= 0){
         console.log(this.name +" out of bounds left")
         this.canMoveLeft = false
+        
       }
       else{
         this.canMoveLeft = true
@@ -362,13 +364,19 @@ function animate(){
       ){
         player.isAttacking = false
       console.log("player attack sucessful")
+      
       if (enemyBar.width >= pEnemyWidth-1){
-        
+
         enemyBar.width -= pEnemyWidth
         enemyBar.position.x += pEnemyWidth
         if(enemyBar.width < 0){
           enemyBar.width = 0
           enemy.alive = false
+          player.score++
+          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
+          setTimeout(() => {
+            restart()
+          }, 3000)
         }
         
       }
@@ -383,11 +391,17 @@ function animate(){
       ){
         enemy.isAttacking = false
       console.log("enemy attack sucessful")
+      
       if (playerBar.width >= pBarWidth-1){ 
         playerBar.width -= pBarWidth
         if(playerBar.width < 0){
           playerBar.width = 0
           player.alive = false
+          enemy.score++
+          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
+          setTimeout(() => {
+            restart()
+          }, 3000)
         }
       }
       
@@ -427,9 +441,9 @@ function restart(){
     enemyBar.position.x = (canvas.width*.6)-(canvas.width*0.05)
     player.canAttack = false
     enemy.canAttack = false
-    timer = 10
+    timer = 100
     pause = true
-    startTimer()
+    
     
   
     
@@ -437,14 +451,33 @@ function restart(){
 
 }
 
-startTimer()
+//startTimer()
+
+setInterval( startTimer, 1000)
 
 
   
 function startTimer(){
-  startTimer.stop1 = setInterval(oneSecondFunction, 1000)
-  
+  console.log("tick")
+  if (timer <=0){
+    pause = false
+    restart()
+    
+  }
+  else{
+    if (pause){
+      if(player.alive && enemy.alive){
+        timer--
+      }
+      
+    }
+    
+  }
 }
+
+  
+  
+
 
   
 
@@ -453,12 +486,17 @@ function oneSecondFunction() {
 
 if (timer<=0){
       pause = false
+      console.log("Hit")
       clearInterval(startTimer.stop1)
       DownHP()
 }
 else{
   if(player.alive && enemy.alive){
     timer--
+  }
+  else{
+    clearInterval(startTimer.stop1)
+    DownHP()
   }
   
 }
@@ -471,7 +509,7 @@ function DownHP(){
         enemyBar.width -= pEnemyWidth
         enemyBar.position.x += pEnemyWidth
         playerBar.width -= pBarWidth
-      
+        console.log('minus')
         if(playerBar.width < 0){
           playerBar.width = 0
           player.alive = false
@@ -548,7 +586,7 @@ window.addEventListener('keydown', (event) => {
       
       break
     case 's':
-      console.log(player.canAttack)
+      
       if (player.canAttack){
         player.attack()
       }
@@ -578,7 +616,7 @@ window.addEventListener('keydown', (event) => {
           
         break
         case 'ArrowDown':
-          console.log(enemy.canAttack)
+          
           if (enemy.canAttack){
             enemy.attack()
           }
@@ -640,7 +678,7 @@ window.addEventListener('keyup', (event) => {
   }
 
   // Debug - Logging out which key went up
-  console.log(event.key + " keyup")
+  //console.log(event.key + " keyup")
 
 })
 
