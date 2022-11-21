@@ -500,7 +500,9 @@ function animate(){
 }
 
 // Starting the simulation
+if (pause) {
 animate()
+} else {}
 const pBarWidth = playerBar.width*.1
 const pEnemyWidth = enemyBar.width*.1
 
@@ -635,14 +637,14 @@ window.addEventListener('keydown', (event) => {
   switch (event.key){
     // This is the pause
 
-    //case 'Escape':
-    //  if (pause){
-    //    pause = false 
-    //  }
-    //  else{
-    //    pause = true
-    //  }
-    //  break
+    case 'Escape':
+     if (pause){
+       pause = false 
+     }
+     else{
+       pause = true
+     }
+     break
       
     case ' ':
         if (pause){
@@ -781,33 +783,39 @@ window.addEventListener('keyup', (event) => {
 })
 
 function vsAI () {
-  if (enemy.position.x < player.position.x) {
-    keys.ArrowRight.pressed = true
-    enemy.lastKey = 'ArrowRight'
-    enemy.attackBox.offset.x = 0
+  if (pause) {
+    if (enemy.position.x < player.position.x) {
+      keys.ArrowRight.pressed = true
+      enemy.lastKey = 'ArrowRight'
+      enemy.attackBox.offset.x = 0
+    } else {
+      keys.ArrowRight.pressed = false
+      enemy.lastKey = 'ArrowLeft'
+    }
+    if (enemy.position.x > player.position.x) {
+      keys.ArrowLeft.pressed = true
+      enemy.lastKey = 'ArrowLeft'
+      enemy.attackBox.offset.x = -50
+    } else {
+      keys.ArrowLeft.pressed = false
+      enemy.lastKey = 'ArrowRight'
+    }
+    if (enemy.position.y > player.position.y + 10) {
+      if(enemy.canJump){
+        enemy.velocity.y = (-20 * jumpForce)
+        enemy.canJump = false
+      }
+    }
+    if (enemy.position.x - player.position.x <= 50 && enemy.position.y - player.position.y <= 50) {
+      if (enemy.canAttack) {
+      enemy.attack()
+      }
+    }
   } else {
     keys.ArrowRight.pressed = false
-    enemy.lastKey = 'ArrowLeft'
-  }
-  if (enemy.position.x > player.position.x) {
-    keys.ArrowLeft.pressed = true
-    enemy.lastKey = 'ArrowLeft'
-    enemy.attackBox.offset.x = -50
-  } else {
     keys.ArrowLeft.pressed = false
-    enemy.lastKey = 'ArrowRight'
   }
-  if (enemy.position.y > player.position.y + 10) {
-    if(enemy.canJump){
-      enemy.velocity.y = (-20 * jumpForce)
-      enemy.canJump = false
-    }
-  }
-  if (enemy.position.x - player.position.x <= 50 && enemy.position.y - player.position.y <= 50) {
-    if (enemy.canAttack) {
-    enemy.attack()
-    }
-  }
+  
 
 
 
