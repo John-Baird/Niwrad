@@ -25,8 +25,7 @@ function App() {
 export default App;
 
 
-// Fix  - When both players move left, enemy blue can't attack
-//                               right, player red can't attack
+
 
 
 
@@ -438,6 +437,14 @@ function animate(){
         }
         enemyBar.width -= pEnemyWidth
         enemyBar.position.x += pEnemyWidth
+        if(player.position.x < enemy.position.x){
+          enemy.velocity.y = -10
+          enemy.velocity.x = 10
+        }
+        if(player.position.x > enemy.position.x){
+          enemy.velocity.y = -10
+          enemy.velocity.x = -10
+        }
         if(enemyBar.width < 0){
           enemyBar.width = 0
           enemy.alive = false
@@ -466,6 +473,14 @@ function animate(){
           playerBar.width -= pBarWidth
         }
         playerBar.width -= pBarWidth
+        if(enemy.position.x < player.position.x){
+          player.velocity.y = -10
+          player.velocity.x = 10
+        }
+        if(enemy.position.x > player.position.x){
+          player.velocity.y = -10
+          player.velocity.x = -10
+        }
         if(playerBar.width < 0){
           playerBar.width = 0
           player.alive = false
@@ -581,6 +596,7 @@ function DownHP(){
         enemyBar.width -= pEnemyWidth
         enemyBar.position.x += pEnemyWidth
         playerBar.width -= pBarWidth
+        
         console.log('minus')
         if(playerBar.width < 0){
           playerBar.width = 0
@@ -692,6 +708,13 @@ window.addEventListener('keydown', (event) => {
           if (enemy.canAttack){
             enemy.attack()
           }
+        break
+        case 'p':
+          
+
+
+
+          
         break
       }
     }
