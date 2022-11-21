@@ -84,6 +84,11 @@ class Sprite {
     this.canMoveRight = true
     this.alive = true
     this.score = 0
+    this.isFalling = false
+    this.maxVelocity = {
+      x: 5,
+      y: 20
+    }
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
@@ -135,7 +140,7 @@ class Sprite {
       if (this.position.x + this.width >= canvas.width ){
         console.log(this.name +" is out of bounds right")
         this.canMoveRight = false
-        
+        this.velocity.x = 0
       }
       else{
         this.canMoveRight = true
@@ -143,6 +148,7 @@ class Sprite {
       if (this.position.x <= 0){
         console.log(this.name +" out of bounds left")
         this.canMoveLeft = false
+        this.velocity.x = 0
         
       }
       else{
@@ -292,6 +298,36 @@ const keys = {
 
 
 
+function friction(){
+    if(player.canJump){
+      if (player.velocity.x > 0){
+        player.velocity.x -= .4;
+      }
+      if (player.velocity.x < 0){
+        player.velocity.x += .4;
+        
+      }
+    }
+    if(enemy.canJump){
+      if (enemy.velocity.x > 0){
+        enemy.velocity.x -= .4;
+      }
+      if (enemy.velocity.x < 0){
+        enemy.velocity.x += .4;
+      }
+      
+    }
+    if (player.velocity.x < 1 && player.velocity.x > -1){
+      player.velocity.x = 0
+    }
+    if (enemy.velocity.x < 1 && enemy.velocity.x > -1){
+      enemy.velocity.x = 0
+    }
+    
+    
+}
+
+
 //detects if 2 differnt rectangles are colliding. 
 
 function rectangularCollision({rectangle1, rectangle2}){
@@ -312,45 +348,75 @@ function rectangularCollision({rectangle1, rectangle2}){
 function animate(){
   // Reseting the simulation
   window.requestAnimationFrame(animate)
-  
+    friction()
+    
     c.fillStyle = 'black'
     c.fillRect(0,0, canvas.width, canvas.height)
     player.update()
     enemy.update()
     playerBar.draw()
     enemyBar.draw()
-    player.velocity.x = 0;
-    enemy.velocity.x = 0;
+    //player.velocity.x = 0;
+    //enemy.velocity.x = 0;
     
     
     // Making sure that the last key pressed is the direction the player is moving
     // Setting velocity direction (left - right)
+    if(player.velocity.y  <= 0){
+      player.isFalling = false
+    }
+    else{
+      player.isFalling = true
+    }
+
+    if(enemy.velocity.y  <= 0){
+      enemy.isFalling = false
+    }
+    else{
+      enemy.isFalling = true
+    }
+    
+    //console.log(player.isFalling)
+    //console.log(player.velocity.y)
+
     if(player.canMoveLeft){
       if (keys.a.pressed && player.lastKey === 'a'){
-        player.velocity.x = (-1 * player.speed)
+        player.velocity.x += (-1 * player.speed)
       }
+      
     }
     if(player.canMoveRight){
       if (keys.d.pressed && player.lastKey === 'd'){
-        player.velocity.x = (1 * player.speed)
+        player.velocity.x += (1 * player.speed)
       }
     }
-
+    if (player.velocity.x > player.maxVelocity.x){
+      player.velocity.x = player.maxVelocity.x
+    }
+    if (player.velocity.x < (-1 * player.maxVelocity.x)){
+      player.velocity.x = (-1 * player.maxVelocity.x)
+    }
 
     // Making sure that the last key pressed is the direction the enemy is moving
     // Setting velocity direction (left - right) 
     // stops when out of bounds
     if(enemy.canMoveLeft){
       if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
-        enemy.velocity.x = (-1 * enemy.speed)
+        enemy.velocity.x += (-1 * enemy.speed)
       }
     }
     if(enemy.canMoveRight){
       if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
-        enemy.velocity.x = (1 * enemy.speed)
+        enemy.velocity.x += (1 * enemy.speed)
       }
     }
 
+    if (enemy.velocity.x > enemy.maxVelocity.x){
+      enemy.velocity.x = enemy.maxVelocity.x
+    }
+    if (enemy.velocity.x < (-1 * enemy.maxVelocity.x)){
+      enemy.velocity.x = (-1 * enemy.maxVelocity.x)
+    }
 
 
     // detect for collision between attackBox and body
@@ -366,7 +432,10 @@ function animate(){
       console.log("player attack sucessful")
       
       if (enemyBar.width >= pEnemyWidth-1){
-
+        if (player.isFalling){
+          enemyBar.width -= pEnemyWidth
+          enemyBar.position.x += pEnemyWidth
+        }
         enemyBar.width -= pEnemyWidth
         enemyBar.position.x += pEnemyWidth
         if(enemyBar.width < 0){
@@ -393,6 +462,9 @@ function animate(){
       console.log("enemy attack sucessful")
       
       if (playerBar.width >= pBarWidth-1){ 
+        if(enemy.isFalling){
+          playerBar.width -= pBarWidth
+        }
         playerBar.width -= pBarWidth
         if(playerBar.width < 0){
           playerBar.width = 0
@@ -643,7 +715,8 @@ window.addEventListener('keyup', (event) => {
     // player
     // Switching off current key
     // Switching the last key pressed to the opposite just incase
-    case 'd':
+    case 'd'
+      :
       keys.d.pressed = false
       player.lastKey = 'a'
     break
@@ -682,63 +755,4 @@ window.addEventListener('keyup', (event) => {
 
 })
 
-
-// create the network
-const synaptic = require('synaptic');
-
-const Layer = synaptic.Layer;
-const Network = synaptic.Network;
-
-const inputLayer = new Layer(4);
-const hiddenLayer = new Layer(3);
-const outputLayer = new Layer(1);
-
-inputLayer.project(hiddenLayer);
-hiddenLayer.project(outputLayer);
-
-const myNetwork = new Network({
-  input: inputLayer,
-  hidden: [hiddenLayer],
-  output: outputLayer,
-});
-
-var learningRate = .3;
-for (var i = 0; i < 2000; i++)
-{
-
-	myNetwork.activate([0,0,0,0]);
-	myNetwork.propagate(learningRate, [0]);
-
-	myNetwork.activate([1,0,0,0]);
-	myNetwork.propagate(learningRate, [1]);
-
-  myNetwork.activate([1,1,0,0]);
-	myNetwork.propagate(learningRate, [0]);
-
-  myNetwork.activate([1,1,1,0]);
-	myNetwork.propagate(learningRate, [1]);
-
-  
-	myNetwork.activate([1,1,1,1]);
-	myNetwork.propagate(learningRate, [0]);
-
-	myNetwork.activate([0,0,0,1]);
-	myNetwork.propagate(learningRate, [1]);
-
-  myNetwork.activate([0,0,1,1]);
-	myNetwork.propagate(learningRate, [0]);
-
-  myNetwork.activate([0,1,1,1]);
-	myNetwork.propagate(learningRate, [1]);
-
-}
-
-console.log('NN1', myNetwork.activate([0,0,0,0]));
-console.log('NN2', myNetwork.activate([1,0,0,0]));
-console.log('NN3', myNetwork.activate([1,1,0,0]));
-console.log('NN4', myNetwork.activate([1,1,1,0]));
-console.log('NN5', myNetwork.activate([1,1,1,1]));
-console.log('NN6', myNetwork.activate([0,0,0,1]));
-console.log('NN7', myNetwork.activate([0,0,1,1]));
-console.log('NN8', myNetwork.activate([0,1,1,1]));
 
