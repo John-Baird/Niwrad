@@ -41,7 +41,7 @@ canvas.height = 576;
 c.fillRect(0,0,canvas.width,canvas.height)
 
 
-let timer = 60
+let timer = 100
 // Gravity 
 const gravity = .6
 
@@ -83,6 +83,12 @@ class Sprite {
     this.canMoveLeft = true
     this.canMoveRight = true
     this.alive = true
+    this.score = 0
+    this.isFalling = false
+    this.maxVelocity = {
+      x: 5,
+      y: 20
+    }
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
@@ -126,6 +132,7 @@ class Sprite {
       if (this.position.y + this.height + this.velocity.y >= canvas.height){
         this.velocity.y = 0;
         this.canJump = true;
+        
       } 
       else{
         this.velocity.y += gravity
@@ -133,6 +140,7 @@ class Sprite {
       if (this.position.x + this.width >= canvas.width ){
         console.log(this.name +" is out of bounds right")
         this.canMoveRight = false
+        this.velocity.x = 0
       }
       else{
         this.canMoveRight = true
@@ -140,6 +148,8 @@ class Sprite {
       if (this.position.x <= 0){
         console.log(this.name +" out of bounds left")
         this.canMoveLeft = false
+        this.velocity.x = 0
+        
       }
       else{
         this.canMoveLeft = true
@@ -288,6 +298,36 @@ const keys = {
 
 
 
+function friction(){
+    if(player.canJump){
+      if (player.velocity.x > 0){
+        player.velocity.x -= .4;
+      }
+      if (player.velocity.x < 0){
+        player.velocity.x += .4;
+        
+      }
+    }
+    if(enemy.canJump){
+      if (enemy.velocity.x > 0){
+        enemy.velocity.x -= .4;
+      }
+      if (enemy.velocity.x < 0){
+        enemy.velocity.x += .4;
+      }
+      
+    }
+    if (player.velocity.x < 1 && player.velocity.x > -1){
+      player.velocity.x = 0
+    }
+    if (enemy.velocity.x < 1 && enemy.velocity.x > -1){
+      enemy.velocity.x = 0
+    }
+    
+    
+}
+
+
 //detects if 2 differnt rectangles are colliding. 
 
 function rectangularCollision({rectangle1, rectangle2}){
@@ -308,45 +348,75 @@ function rectangularCollision({rectangle1, rectangle2}){
 function animate(){
   // Reseting the simulation
   window.requestAnimationFrame(animate)
-  if (pause){
+    friction()
+    
     c.fillStyle = 'black'
     c.fillRect(0,0, canvas.width, canvas.height)
     player.update()
     enemy.update()
     playerBar.draw()
     enemyBar.draw()
-    player.velocity.x = 0;
-    enemy.velocity.x = 0;
+    //player.velocity.x = 0;
+    //enemy.velocity.x = 0;
     
     
     // Making sure that the last key pressed is the direction the player is moving
     // Setting velocity direction (left - right)
+    if(player.velocity.y  <= 0){
+      player.isFalling = false
+    }
+    else{
+      player.isFalling = true
+    }
+
+    if(enemy.velocity.y  <= 0){
+      enemy.isFalling = false
+    }
+    else{
+      enemy.isFalling = true
+    }
+    
+    //console.log(player.isFalling)
+    //console.log(player.velocity.y)
+
     if(player.canMoveLeft){
       if (keys.a.pressed && player.lastKey === 'a'){
-        player.velocity.x = (-1 * player.speed)
+        player.velocity.x += (-1 * player.speed)
       }
+      
     }
     if(player.canMoveRight){
       if (keys.d.pressed && player.lastKey === 'd'){
-        player.velocity.x = (1 * player.speed)
+        player.velocity.x += (1 * player.speed)
       }
     }
-
+    if (player.velocity.x > player.maxVelocity.x){
+      player.velocity.x = player.maxVelocity.x
+    }
+    if (player.velocity.x < (-1 * player.maxVelocity.x)){
+      player.velocity.x = (-1 * player.maxVelocity.x)
+    }
 
     // Making sure that the last key pressed is the direction the enemy is moving
     // Setting velocity direction (left - right) 
     // stops when out of bounds
     if(enemy.canMoveLeft){
       if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
-        enemy.velocity.x = (-1 * enemy.speed)
+        enemy.velocity.x += (-1 * enemy.speed)
       }
     }
     if(enemy.canMoveRight){
       if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
-        enemy.velocity.x = (1 * enemy.speed)
+        enemy.velocity.x += (1 * enemy.speed)
       }
     }
 
+    if (enemy.velocity.x > enemy.maxVelocity.x){
+      enemy.velocity.x = enemy.maxVelocity.x
+    }
+    if (enemy.velocity.x < (-1 * enemy.maxVelocity.x)){
+      enemy.velocity.x = (-1 * enemy.maxVelocity.x)
+    }
 
 
     // detect for collision between attackBox and body
@@ -360,13 +430,22 @@ function animate(){
       ){
         player.isAttacking = false
       console.log("player attack sucessful")
+      
       if (enemyBar.width >= pEnemyWidth-1){
-        
+        if (player.isFalling){
+          enemyBar.width -= pEnemyWidth
+          enemyBar.position.x += pEnemyWidth
+        }
         enemyBar.width -= pEnemyWidth
         enemyBar.position.x += pEnemyWidth
         if(enemyBar.width < 0){
           enemyBar.width = 0
           enemy.alive = false
+          player.score++
+          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
+          setTimeout(() => {
+            restart()
+          }, 3000)
         }
         
       }
@@ -381,16 +460,25 @@ function animate(){
       ){
         enemy.isAttacking = false
       console.log("enemy attack sucessful")
+      
       if (playerBar.width >= pBarWidth-1){ 
+        if(enemy.isFalling){
+          playerBar.width -= pBarWidth
+        }
         playerBar.width -= pBarWidth
         if(playerBar.width < 0){
           playerBar.width = 0
           player.alive = false
+          enemy.score++
+          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
+          setTimeout(() => {
+            restart()
+          }, 3000)
         }
       }
       
     }
-  }
+  
 
 
 
@@ -401,27 +489,121 @@ animate()
 const pBarWidth = playerBar.width*.1
 const pEnemyWidth = enemyBar.width*.1
 
+let rpBarWidth = playerBar.width
+let reBarWidth = enemyBar.width
+
+function restart(){
+  
+    c.fillStyle = 'black'
+    c.fillRect(0,0, canvas.width, canvas.height)
+    playerBar.width = rpBarWidth
+    enemyBar.width = reBarWidth
+    player.alive = true
+    enemy.alive = true
+    player.position.y = 0
+    player.position.x = 10
+    enemy.position.y = 100
+    enemy.position.x = 400
+    player.canJump = false
+    enemy.canJump = false
+    player.velocity.x = 0
+    player.velocity.y = 0
+    enemy.velocity.x = 0
+    enemy.velocity.y = 0
+    enemyBar.position.x = (canvas.width*.6)-(canvas.width*0.05)
+    player.canAttack = false
+    enemy.canAttack = false
+    timer = 100
+    pause = true
+    
+    
+  
+    
+  
+
+}
+
+//startTimer()
+
+setInterval( startTimer, 1000)
 
 
-a()
+  
+function startTimer(){
+  console.log("tick")
+  if (timer <=0){
+    pause = false
+    restart()
+    
+  }
+  else{
+    if (pause){
+      if(player.alive && enemy.alive){
+        timer--
+      }
+      
+    }
+    
+  }
+}
 
-function a(){
-setInterval(oneSecondFunction, 1000);
-};
+  
+  
+
+
+  
+
 
 function oneSecondFunction() {
 
 if (timer<=0){
-  
+      pause = false
+      console.log("Hit")
+      clearInterval(startTimer.stop1)
+      DownHP()
 }
 else{
   if(player.alive && enemy.alive){
     timer--
   }
+  else{
+    clearInterval(startTimer.stop1)
+    DownHP()
+  }
   
 }
 }
 
+
+function DownHP(){
+    let stop2 = setInterval(function(){
+      if(enemy.alive && player.alive){
+        enemyBar.width -= pEnemyWidth
+        enemyBar.position.x += pEnemyWidth
+        playerBar.width -= pBarWidth
+        console.log('minus')
+        if(playerBar.width < 0){
+          playerBar.width = 0
+          player.alive = false
+          enemy.score++
+          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
+          clearInterval(stop2)
+          restart()
+        }
+        if(enemyBar.width < 0){
+          enemyBar.width = 0
+          enemy.alive = false
+          player.score++
+          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
+          clearInterval(stop2)
+          restart()
+        
+      }
+      }
+    },300)
+
+
+}
 
 
 
@@ -435,21 +617,19 @@ window.addEventListener('keydown', (event) => {
   switch (event.key){
     // This is the pause
 
-    case 'Escape':
-      if (pause){
-        pause = false 
-      }
-      else{
-        pause = true
-      }
-      break
+    //case 'Escape':
+    //  if (pause){
+    //    pause = false 
+    //  }
+    //  else{
+    //    pause = true
+    //  }
+    //  break
       
     case ' ':
         if (pause){
-          //enemy.restart()
-          //player.restart()
-          //playerBar.restart()
-          //enemyBar.restart()
+
+          restart()
         }
       break
   }
@@ -478,7 +658,7 @@ window.addEventListener('keydown', (event) => {
       
       break
     case 's':
-      console.log(player.canAttack)
+      
       if (player.canAttack){
         player.attack()
       }
@@ -508,7 +688,7 @@ window.addEventListener('keydown', (event) => {
           
         break
         case 'ArrowDown':
-          console.log(enemy.canAttack)
+          
           if (enemy.canAttack){
             enemy.attack()
           }
@@ -535,7 +715,8 @@ window.addEventListener('keyup', (event) => {
     // player
     // Switching off current key
     // Switching the last key pressed to the opposite just incase
-    case 'd':
+    case 'd'
+      :
       keys.d.pressed = false
       player.lastKey = 'a'
     break
@@ -570,134 +751,8 @@ window.addEventListener('keyup', (event) => {
   }
 
   // Debug - Logging out which key went up
-  console.log(event.key + " keyup")
+  //console.log(event.key + " keyup")
 
 })
-
-
-// create the network
-const synaptic = require('synaptic');
-
-const Layer = synaptic.Layer;
-const Network = synaptic.Network;
-
-const inputLayer = new Layer(4);
-const hiddenLayer = new Layer(3);
-const outputLayer = new Layer(1);
-
-inputLayer.project(hiddenLayer);
-hiddenLayer.project(outputLayer);
-
-const myNetwork = new Network({
-  input: inputLayer,
-  hidden: [hiddenLayer],
-  output: outputLayer,
-});
-
-var learningRate = .3;
-for (var i = 0; i < 2000; i++)
-{
-
-	// myNetwork.activate([0,0,0,0]);
-	// myNetwork.propagate(learningRate, [0]);
-
-	// myNetwork.activate([1,0,0,0]);
-	// myNetwork.propagate(learningRate, [1]);
-
-  // myNetwork.activate([1,1,0,0]);
-	// myNetwork.propagate(learningRate, [0]);
-
-  // myNetwork.activate([1,1,1,0]);
-	// myNetwork.propagate(learningRate, [1]);
-  
-	// myNetwork.activate([1,1,1,1]);
-	// myNetwork.propagate(learningRate, [0]);
-
-	// myNetwork.activate([0,0,0,1]);
-	// myNetwork.propagate(learningRate, [1]);
-
-  // myNetwork.activate([0,0,1,1]);
-	// myNetwork.propagate(learningRate, [0]);
-
-  // myNetwork.activate([0,1,1,1]);
-	// myNetwork.propagate(learningRate, [1]);
-
-  //([y,x,ey,ex,started])
-
-  // do nothing
-    myNetwork.activate([3,3,3,3,1]);
-    myNetwork.propagate(learningRate, [1]);
-    myNetwork.activate([3,3,4,4,1]);
-    myNetwork.propagate(learningRate, [1]);
-
-  // jump and attack
-    myNetwork.activate([3,-3,4,-3,0]);
-    myNetwork.propagate(learningRate, [2]);
-    myNetwork.activate([3,2,4,2,0]);
-    myNetwork.propagate(learningRate, [2]);
-
-  // go right
-    myNetwork.activate([3,-3,3,2,0]);
-    myNetwork.propagate(learningRate, [3]);
-    myNetwork.activate([3,-10,3,10,0]);
-    myNetwork.propagate(learningRate, [3]);
-
-  // go left
-    myNetwork.activate([3,-2,3,-4,0]);
-    myNetwork.propagate(learningRate, [4]);
-    myNetwork.activate([3,3,3,-10,0]);
-    myNetwork.propagate(learningRate, [4]);
-
-  // attack and go right
-    myNetwork.activate([3,-3,3,-2,0]);
-    myNetwork.propagate(learningRate, [5]);
-    myNetwork.activate([3,9,3,8,0]);
-    myNetwork.propagate(learningRate, [5]);
-
-  // attack and go left
-    myNetwork.activate([3,-3,3,-4,0]);
-    myNetwork.propagate(learningRate, [6]);
-    myNetwork.activate([3,-10,3,10,0]);
-    myNetwork.propagate(learningRate, [6]);
-
-  // jump and go right
-	myNetwork.activate([3,-3,4,2,0]);
-	myNetwork.propagate(learningRate, [7]);
-  myNetwork.activate([3,3,4,5,0]);
-	myNetwork.propagate(learningRate, [7]);
-
-  // jump and go left
-    myNetwork.activate([3,-3,4,-4,0]);
-    myNetwork.propagate(learningRate, [8]);
-    myNetwork.activate([3,10,4,8,0]);
-    myNetwork.propagate(learningRate, [8]);
-
-  // jump and go right w attack
-    myNetwork.activate([3,-3,4,-2,0]);
-    myNetwork.propagate(learningRate, [9]);
-    myNetwork.activate([3,6,4,7,0]);
-    myNetwork.propagate(learningRate, [9]);
-
-  // jump and go left w attack
-    myNetwork.activate([3,-3,4,-4,0]);
-    myNetwork.propagate(learningRate, [10]);
-    myNetwork.activate([3,9,4,10,0]);
-    myNetwork.propagate(learningRate, [10]);
-
-}
-
-console.log('NN1', myNetwork.activate([3,3,3,3,1])); //1
-console.log('NN2', myNetwork.activate([3,-3,3,-3,0])); //2
-console.log('NN3', myNetwork.activate([3,-10,3,4,0])); //3
-console.log('NN4', myNetwork.activate([3,10,3,-2,0])); //4
-console.log('NN5', myNetwork.activate([3,-5,3,-4,0])); //5
-console.log('NN6', myNetwork.activate([3,5,3,4,0])); //6
-console.log('NN7', myNetwork.activate([3,-5,4,-3,0])); //7
-console.log('NN8', myNetwork.activate([3,-10,4,-8,0])); //8
-console.log('NN9', myNetwork.activate([3,-5,4,-4,0])); //9
-console.log('NN10', myNetwork.activate([3,-10,4,-9,0])); //10
-
-// let TrainingData = []
-// let TrainingResult = []
 
 
