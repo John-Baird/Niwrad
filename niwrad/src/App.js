@@ -598,39 +598,106 @@ var learningRate = .3;
 for (var i = 0; i < 2000; i++)
 {
 
-	myNetwork.activate([0,0,0,0]);
-	myNetwork.propagate(learningRate, [0]);
+	// myNetwork.activate([0,0,0,0]);
+	// myNetwork.propagate(learningRate, [0]);
 
-	myNetwork.activate([1,0,0,0]);
-	myNetwork.propagate(learningRate, [1]);
+	// myNetwork.activate([1,0,0,0]);
+	// myNetwork.propagate(learningRate, [1]);
 
-  myNetwork.activate([1,1,0,0]);
-	myNetwork.propagate(learningRate, [0]);
+  // myNetwork.activate([1,1,0,0]);
+	// myNetwork.propagate(learningRate, [0]);
 
-  myNetwork.activate([1,1,1,0]);
-	myNetwork.propagate(learningRate, [1]);
-
+  // myNetwork.activate([1,1,1,0]);
+	// myNetwork.propagate(learningRate, [1]);
   
-	myNetwork.activate([1,1,1,1]);
-	myNetwork.propagate(learningRate, [0]);
+	// myNetwork.activate([1,1,1,1]);
+	// myNetwork.propagate(learningRate, [0]);
 
-	myNetwork.activate([0,0,0,1]);
-	myNetwork.propagate(learningRate, [1]);
+	// myNetwork.activate([0,0,0,1]);
+	// myNetwork.propagate(learningRate, [1]);
 
-  myNetwork.activate([0,0,1,1]);
-	myNetwork.propagate(learningRate, [0]);
+  // myNetwork.activate([0,0,1,1]);
+	// myNetwork.propagate(learningRate, [0]);
 
-  myNetwork.activate([0,1,1,1]);
-	myNetwork.propagate(learningRate, [1]);
+  // myNetwork.activate([0,1,1,1]);
+	// myNetwork.propagate(learningRate, [1]);
+
+  //([y,x,ey,ex,started])
+
+  // do nothing
+    myNetwork.activate([3,3,3,3,1]);
+    myNetwork.propagate(learningRate, [1]);
+    myNetwork.activate([3,3,4,4,1]);
+    myNetwork.propagate(learningRate, [1]);
+
+  // jump and attack
+    myNetwork.activate([3,-3,4,-3,0]);
+    myNetwork.propagate(learningRate, [2]);
+    myNetwork.activate([3,2,4,2,0]);
+    myNetwork.propagate(learningRate, [2]);
+
+  // go right
+    myNetwork.activate([3,-3,3,2,0]);
+    myNetwork.propagate(learningRate, [3]);
+    myNetwork.activate([3,-10,3,10,0]);
+    myNetwork.propagate(learningRate, [3]);
+
+  // go left
+    myNetwork.activate([3,-2,3,-4,0]);
+    myNetwork.propagate(learningRate, [4]);
+    myNetwork.activate([3,3,3,-10,0]);
+    myNetwork.propagate(learningRate, [4]);
+
+  // attack and go right
+    myNetwork.activate([3,-3,3,-2,0]);
+    myNetwork.propagate(learningRate, [5]);
+    myNetwork.activate([3,9,3,8,0]);
+    myNetwork.propagate(learningRate, [5]);
+
+  // attack and go left
+    myNetwork.activate([3,-3,3,-4,0]);
+    myNetwork.propagate(learningRate, [6]);
+    myNetwork.activate([3,-10,3,10,0]);
+    myNetwork.propagate(learningRate, [6]);
+
+  // jump and go right
+	myNetwork.activate([3,-3,4,2,0]);
+	myNetwork.propagate(learningRate, [7]);
+  myNetwork.activate([3,3,4,5,0]);
+	myNetwork.propagate(learningRate, [7]);
+
+  // jump and go left
+    myNetwork.activate([3,-3,4,-4,0]);
+    myNetwork.propagate(learningRate, [8]);
+    myNetwork.activate([3,10,4,8,0]);
+    myNetwork.propagate(learningRate, [8]);
+
+  // jump and go right w attack
+    myNetwork.activate([3,-3,4,-2,0]);
+    myNetwork.propagate(learningRate, [9]);
+    myNetwork.activate([3,6,4,7,0]);
+    myNetwork.propagate(learningRate, [9]);
+
+  // jump and go left w attack
+    myNetwork.activate([3,-3,4,-4,0]);
+    myNetwork.propagate(learningRate, [10]);
+    myNetwork.activate([3,9,4,10,0]);
+    myNetwork.propagate(learningRate, [10]);
 
 }
 
-console.log('NN1', myNetwork.activate([0,0,0,0]));
-console.log('NN2', myNetwork.activate([1,0,0,0]));
-console.log('NN3', myNetwork.activate([1,1,0,0]));
-console.log('NN4', myNetwork.activate([1,1,1,0]));
-console.log('NN5', myNetwork.activate([1,1,1,1]));
-console.log('NN6', myNetwork.activate([0,0,0,1]));
-console.log('NN7', myNetwork.activate([0,0,1,1]));
-console.log('NN8', myNetwork.activate([0,1,1,1]));
+console.log('NN1', myNetwork.activate([3,3,3,3,1])); //1
+console.log('NN2', myNetwork.activate([3,-3,3,-3,0])); //2
+console.log('NN3', myNetwork.activate([3,-10,3,4,0])); //3
+console.log('NN4', myNetwork.activate([3,10,3,-2,0])); //4
+console.log('NN5', myNetwork.activate([3,-5,3,-4,0])); //5
+console.log('NN6', myNetwork.activate([3,5,3,4,0])); //6
+console.log('NN7', myNetwork.activate([3,-5,4,-3,0])); //7
+console.log('NN8', myNetwork.activate([3,-10,4,-8,0])); //8
+console.log('NN9', myNetwork.activate([3,-5,4,-4,0])); //9
+console.log('NN10', myNetwork.activate([3,-10,4,-9,0])); //10
+
+// let TrainingData = []
+// let TrainingResult = []
+
 
