@@ -478,7 +478,7 @@ function animate(){
       }
       
     }
-  
+  vsAI()
 
 
 
@@ -531,6 +531,8 @@ setInterval( startTimer, 1000)
   
 function startTimer(){
   console.log("tick")
+  enemy.canAttack = true
+  player.canAttack = true
   if (timer <=0){
     pause = false
     restart()
@@ -724,9 +726,9 @@ window.addEventListener('keyup', (event) => {
       keys.a.pressed = false
       player.lastKey = 'd'
     break
-    case 's':
-      player.canAttack = true
-      break
+    // case 's':
+    //   player.canAttack = true
+    //   break
 
 
     //enemy
@@ -754,5 +756,38 @@ window.addEventListener('keyup', (event) => {
   //console.log(event.key + " keyup")
 
 })
+
+function vsAI () {
+  if (enemy.position.x < player.position.x) {
+    keys.ArrowRight.pressed = true
+    enemy.lastKey = 'ArrowRight'
+    enemy.attackBox.offset.x = 0
+  } else {
+    keys.ArrowRight.pressed = false
+    enemy.lastKey = 'ArrowLeft'
+  }
+  if (enemy.position.x > player.position.x) {
+    keys.ArrowLeft.pressed = true
+    enemy.lastKey = 'ArrowLeft'
+    enemy.attackBox.offset.x = -50
+  } else {
+    keys.ArrowLeft.pressed = false
+    enemy.lastKey = 'ArrowRight'
+  }
+  if (enemy.position.y > player.position.y + 10) {
+    if(enemy.canJump){
+      enemy.velocity.y = (-20 * jumpForce)
+      enemy.canJump = false
+    }
+  }
+  if (enemy.position.x - player.position.x <= 50 && enemy.position.y - player.position.y <= 50) {
+    if (enemy.canAttack) {
+    enemy.attack()
+    }
+  }
+
+
+
+}
 
 
