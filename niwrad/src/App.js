@@ -1,8 +1,7 @@
 
 import './App.css';
 
-
-
+import BG from './background.png'
 
 function App() {
 
@@ -53,6 +52,46 @@ const jumpForce = 1
 // This is the pause
 
 let pause = true
+
+//Image Creator
+
+class Pic{
+  constructor({position, name, imageSrc, height = canvas.height, width = canvas.width, }){
+    this.position = position
+    this.name = name
+    this.width = width
+    this.height = height
+    this.image = new Image()
+    this.image.src = imageSrc
+
+  }
+
+  draw() {
+    
+    //Find out how to draw
+  }
+
+      
+  update(){
+      
+      this.draw()
+      
+  
+  
+  }
+
+}
+
+
+const background = new Pic({
+  position:{
+    x: 0,
+    y: 0
+  },
+  imageSrc: {BG}
+})
+
+
 
 // Sprite Creator
 
@@ -160,13 +199,33 @@ class Sprite {
   }
     //attack lasts .1 seconds
     attack() {
+      
       this.isAttacking = true
       this.canAttack = false
       setTimeout(() => {
         this.isAttacking = false
       }, 100)
     }
-
+    knockback(){
+      console.log(this.name)
+        let i=1
+        if (this.name == "player"){
+          i = 1
+        }
+        if (this.name == "enemy"){
+          i = -1
+        }
+        if(player.position.x+player.width < enemy.position.x){
+          this.velocity.y = -10
+          this.velocity.x = -20*i
+          this.canJump = false
+        }
+        if(player.position.x > enemy.position.x+enemy.width){
+          this.velocity.y = -10
+          this.velocity.x = 20*i
+          this.canJump = false
+        }
+      }
     
 
 
@@ -351,10 +410,12 @@ function animate(){
     
     c.fillStyle = 'black'
     c.fillRect(0,0, canvas.width, canvas.height)
+    background.update()
     player.update()
     enemy.update()
     playerBar.draw()
     enemyBar.draw()
+    
     //player.velocity.x = 0;
     //enemy.velocity.x = 0;
     
@@ -429,6 +490,11 @@ function animate(){
       ){
         player.isAttacking = false
       console.log("player attack sucessful")
+      if(enemy.canAttack){
+        if (enemy.position.x < canvas.width-(enemy.width*2) && enemy.position.x > enemy.width){
+          enemy.knockback()
+        }
+      }
       
       if (enemyBar.width >= pEnemyWidth-1){
         if (player.isFalling){
@@ -437,14 +503,7 @@ function animate(){
         }
         enemyBar.width -= pEnemyWidth
         enemyBar.position.x += pEnemyWidth
-        if(player.position.x < enemy.position.x){
-          enemy.velocity.y = -10
-          enemy.velocity.x = 10
-        }
-        if(player.position.x > enemy.position.x){
-          enemy.velocity.y = -10
-          enemy.velocity.x = -10
-        }
+        
         if(enemyBar.width < 0){
           enemyBar.width = 0
           enemy.alive = false
@@ -467,20 +526,22 @@ function animate(){
       ){
         enemy.isAttacking = false
       console.log("enemy attack sucessful")
+      if (player.canJump){
+        if (player.position.x < canvas.width-(player.width*2) && player.position.x > player.width){
+          player.knockback()
+        }
+        else(
+          console.log("to close to wall")
+        )
+        
+      }
       
       if (playerBar.width >= pBarWidth-1){ 
         if(enemy.isFalling){
           playerBar.width -= pBarWidth
         }
         playerBar.width -= pBarWidth
-        if(enemy.position.x < player.position.x){
-          player.velocity.y = -10
-          player.velocity.x = 10
-        }
-        if(enemy.position.x > player.position.x){
-          player.velocity.y = -10
-          player.velocity.x = -10
-        }
+        
         if(playerBar.width < 0){
           playerBar.width = 0
           player.alive = false
@@ -493,7 +554,7 @@ function animate(){
       }
       
     }
-  vsAI()
+  //vsAI()
 
 
 
@@ -545,11 +606,13 @@ function restart(){
 setInterval( startTimer, 1000)
 
 
-  
+  //add a graduall deaccleration of max velocity 
 function startTimer(){
   console.log("tick")
   enemy.canAttack = true
   player.canAttack = true
+  // player.maxVelocity = 5
+  // enemy.maxVelocity = 5
   if (timer <=0){
     pause = false
     restart()
@@ -715,7 +778,7 @@ window.addEventListener('keydown', (event) => {
         break
         case 'p':
           
-
+          
 
 
           
@@ -770,7 +833,7 @@ window.addEventListener('keyup', (event) => {
     break
 
     case 'ArrowDown':
-      enemy.canAttack = true
+      //enemy.canAttack = true
       
       break
 
@@ -800,7 +863,7 @@ function vsAI () {
       keys.ArrowLeft.pressed = false
       enemy.lastKey = 'ArrowRight'
     }
-    if (enemy.position.y > player.position.y + 10) {
+    if (enemy.position.y > player.position.y +100) {
       if(enemy.canJump){
         enemy.velocity.y = (-20 * jumpForce)
         enemy.canJump = false
@@ -820,5 +883,8 @@ function vsAI () {
 
 
 }
+
+
+  
 
 
