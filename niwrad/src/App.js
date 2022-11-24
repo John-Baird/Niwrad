@@ -1,7 +1,23 @@
 
 import './App.css';
 
-import BG from './background.png'
+import bg from './img/background.png'
+
+import s from './img/shop.png'
+
+
+//TODO
+// Add blocking
+// Add current state of player/enemy
+// Add animations according to the state
+// Add a starting menu
+// Add 2 player and AI, leave multiplayer for later
+// launch demo
+// Add loading screen
+// Add music and noise
+// Add changing backgrounds and different character color selects
+// Add multiplayer lobbies
+
 
 function App() {
 
@@ -26,7 +42,7 @@ export default App;
 
 
 
-
+//Setting the canvas to a variable 'c'
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -39,59 +55,127 @@ canvas.height = 576;
 c.fillRect(0,0,canvas.width,canvas.height)
 
 
+
+let state = ['idle','normal attack','critical attack', 'jumping up', 'falling down', 'sliding down wall', 'knocked back', 'blocking', 'crouching', 'stunned', 'dying']
+
+
+//how high ground is from the bottom
+let groundHeight = 96
+
+//Battle timer
 let timer = 100
+
 // Gravity 
 const gravity = .6
+
 
 // This multiplies all the sprites speed
 const spriteSpeedIntensifier = 1
 
 // This multiplies all the sprite's jump force
-const jumpForce = 1
+const jumpForce = .8
 
 // This is the pause
-
 let pause = true
 
-//Image Creator
+//Image Creator WIP
 
 class Pic{
-  constructor({position, name, imageSrc, height = canvas.height, width = canvas.width, }){
+  constructor({position, name, imageSrc, height = canvas.height, width = canvas.width, scale = 1, framesMax = 1, currentFrame = 0, framesElapsed = 0, framesHold = 10}){
     this.position = position
     this.name = name
     this.width = width
     this.height = height
+    this.scale = scale
+    this.framesMax = framesMax
+    this.currentFrame = currentFrame
+    this.framesElapsed = framesElapsed
+    this.framesHold = framesHold
     this.image = new Image()
     this.image.src = imageSrc
+    this.image.onload = () => {
+      this.update()
+    }
 
   }
 
   draw() {
-    
     //Find out how to draw
-  }
+    if(this.image){
+      
+      c.drawImage(this.image,
+        this.currentFrame.x * (this.image.width / this.framesMax.x),
+        this.currentFrame.y * (this.image.height / this.framesMax.y),
+        this.image.width / this.framesMax.x,
+        this.image.height / this.framesMax.y,
+        this.position.x,
+        this.position.y,
+        (this.width / this.framesMax.x )* this.scale.x,
+        (this.height / this.framesMax.y) * this.scale.y);
+    }
+  
 
-      
+  }
   update(){
-      
+      //This will run each frame
       this.draw()
+      this.framesElapsed++
+      if (this.framesElapsed % this.framesHold === 0){
+        this.currentFrame.x ++
+        if (this.currentFrame.x >= this.framesMax.x){
+          this.currentFrame.x = 0
+        }
+      }
       
-  
-  
   }
 
 }
 
-
+// making a new pic for the background
 const background = new Pic({
   position:{
     x: 0,
     y: 0
   },
-  imageSrc: {BG}
+  imageSrc: bg, 
+  width: canvas.width,
+  height: canvas.height,
+  scale:{
+    x: 1,
+    y: 1
+  },
+  framesMax:{
+    x: 1,
+    y: 1
+  },
+  currentFrame:{
+    x: 0,
+    y: 0
+  }
 })
 
-
+const shop = new Pic({
+  position:{
+    x: 630,
+    y: 79
+  },
+  imageSrc: s,
+  width: 2000,
+  
+  height: 400,
+  scale:{
+    x: 1,
+    y: 1
+  },
+  framesMax:{
+    x: 6,
+    y: 1
+  },
+  currentFrame:{
+    x: 0,
+    y: 0
+  }
+})
 
 // Sprite Creator
 
@@ -120,9 +204,12 @@ class Sprite {
     this.canJump = true
     this.canMoveLeft = true
     this.canMoveRight = true
+    this.canCrouch = true
     this.alive = true
     this.score = 0
     this.isFalling = false
+    this.isBlocking = false
+    this.isStunned = false
     this.maxVelocity = {
       x: 5,
       y: 20
@@ -147,7 +234,7 @@ class Sprite {
    }
   }
 
-      
+      //Updating the sprite frame for frame
   update(){
     if(this.alive){
       this.draw()
@@ -167,7 +254,7 @@ class Sprite {
       this.position.x += this.velocity.x
       this.position.y += this.velocity.y
   
-      if (this.position.y + this.height + this.velocity.y >= canvas.height){
+      if (this.position.y + this.height + this.velocity.y >= canvas.height-groundHeight){
         this.velocity.y = 0;
         this.canJump = true;
         
@@ -206,7 +293,22 @@ class Sprite {
         this.isAttacking = false
       }, 100)
     }
+
+    // Stunned
+
+    stun(time){
+      this.isStunned = true
+      let preset = this.lastKey
+      this.lastKey = ''
+      setTimeout(() => {
+        this.isStunned = false
+        this.lastKey = preset
+      }, time)
+    }
+
+    //Implements knockback under certain conditions
     knockback(){
+      
       console.log(this.name)
         let i=1
         if (this.name == "player"){
@@ -219,11 +321,13 @@ class Sprite {
           this.velocity.y = -10
           this.velocity.x = -20*i
           this.canJump = false
+          this.stun(500)
         }
         if(player.position.x > enemy.position.x+enemy.width){
           this.velocity.y = -10
           this.velocity.x = 20*i
           this.canJump = false
+          this.stun(500)
         }
       }
     
@@ -236,12 +340,6 @@ class Sprite {
 
 
 // Making a new player
-
-// Start position
-// Starting velocity - Resets after touching ground
-// Speed
-// Color (default is red)
-
 const player = new Sprite({
   position:{
     x: 10,
@@ -263,12 +361,6 @@ const player = new Sprite({
 
 
 // Making a new enemy
-
-// Start position
-// Starting velocity - Resets after touching ground
-// Speed
-// Color
-
 const enemy = new Sprite({
   position:{
     x: 400,
@@ -289,7 +381,7 @@ const enemy = new Sprite({
 
 
 
-
+// for reference
 //canvas.width = 1024;
 //canvas.height = 576;
 
@@ -337,7 +429,7 @@ const enemyBar = new Sprite({
 
 
 
-// Checking if the key is currently pressed
+// Checking if certain kyes are currently pressed
 
 const keys = {
   a: {
@@ -355,7 +447,7 @@ const keys = {
 } 
 
 
-
+//Adding friction when on ground
 function friction(){
     if(player.canJump){
       if (player.velocity.x > 0){
@@ -386,7 +478,7 @@ function friction(){
 }
 
 
-//detects if 2 differnt rectangles are colliding. 
+//detects if 2 differnt rectangles are colliding. (attackbox rectangles)
 
 function rectangularCollision({rectangle1, rectangle2}){
 
@@ -406,11 +498,15 @@ function rectangularCollision({rectangle1, rectangle2}){
 function animate(){
   // Reseting the simulation
   window.requestAnimationFrame(animate)
+    //Global functions
     friction()
+  
     
+    //draw functions
     c.fillStyle = 'black'
     c.fillRect(0,0, canvas.width, canvas.height)
     background.update()
+    shop.update()
     player.update()
     enemy.update()
     playerBar.draw()
@@ -420,8 +516,7 @@ function animate(){
     //enemy.velocity.x = 0;
     
     
-    // Making sure that the last key pressed is the direction the player is moving
-    // Setting velocity direction (left - right)
+   //checking if player is falling
     if(player.velocity.y  <= 0){
       player.isFalling = false
     }
@@ -429,6 +524,7 @@ function animate(){
       player.isFalling = true
     }
 
+    //checking if enemy is falling
     if(enemy.velocity.y  <= 0){
       enemy.isFalling = false
     }
@@ -436,9 +532,8 @@ function animate(){
       enemy.isFalling = true
     }
     
-    //console.log(player.isFalling)
-    //console.log(player.velocity.y)
 
+    //Setting position and velocity boundaries for player
     if(player.canMoveLeft){
       if (keys.a.pressed && player.lastKey === 'a'){
         player.velocity.x += (-1 * player.speed)
@@ -457,9 +552,7 @@ function animate(){
       player.velocity.x = (-1 * player.maxVelocity.x)
     }
 
-    // Making sure that the last key pressed is the direction the enemy is moving
-    // Setting velocity direction (left - right) 
-    // stops when out of bounds
+    //Setting position and velocity boundaries for enemy
     if(enemy.canMoveLeft){
       if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
         enemy.velocity.x += (-1 * enemy.speed)
@@ -479,20 +572,31 @@ function animate(){
     }
 
 
-    // detect for collision between attackBox and body
+    // detect for collisions
 
+    //player attack
     if(
       rectangularCollision({
       rectangle1: player,
       rectangle2: enemy
-    }) &&
-      player.isAttacking
-      ){
-        player.isAttacking = false
+    }) &&player.isAttacking)
+        {
+      player.isAttacking = false
       console.log("player attack sucessful")
       if(enemy.canAttack){
         if (enemy.position.x < canvas.width-(enemy.width*2) && enemy.position.x > enemy.width){
-          enemy.knockback()
+          if(enemy.isBlocking){
+            player.knockback()
+          }
+          else{
+            enemy.knockback()
+          }
+          
+        }
+        else{
+          if(enemy.isBlocking){
+            player.stun(400)
+          }
         }
       }
       
@@ -518,21 +622,31 @@ function animate(){
       
     } 
 
+    //enemy attack
     if(rectangularCollision({
       rectangle1: enemy,
       rectangle2: player,
-    }) &&
-      enemy.isAttacking
-      ){
-        enemy.isAttacking = false
+    }) && enemy.isAttacking)
+      {
+      enemy.isAttacking = false
       console.log("enemy attack sucessful")
       if (player.canJump){
         if (player.position.x < canvas.width-(player.width*2) && player.position.x > player.width){
-          player.knockback()
+          if(player.isBlocking){
+            enemy.knockback()
+          }
+          else{
+            player.knockback()
+          }
+          
         }
-        else(
+        else{
           console.log("to close to wall")
-        )
+          if(player.isBlocking){
+            enemy.stun(400)
+          }
+        }
+        
         
       }
       
@@ -554,6 +668,8 @@ function animate(){
       }
       
     }
+
+
   //vsAI()
 
 
@@ -564,12 +680,16 @@ function animate(){
 if (pause) {
 animate()
 } else {}
+
+//Setting the hp bars and how much damage they can take
 const pBarWidth = playerBar.width*.1
 const pEnemyWidth = enemyBar.width*.1
 
 let rpBarWidth = playerBar.width
 let reBarWidth = enemyBar.width
 
+
+// Restarts on 'space'
 function restart(){
   
     c.fillStyle = 'black'
@@ -605,8 +725,7 @@ function restart(){
 
 setInterval( startTimer, 1000)
 
-
-  //add a graduall deaccleration of max velocity 
+  // Timer for game
 function startTimer(){
   console.log("tick")
   enemy.canAttack = true
@@ -636,57 +755,10 @@ function startTimer(){
   
 
 
-function oneSecondFunction() {
-
-if (timer<=0){
-      pause = false
-      console.log("Hit")
-      clearInterval(startTimer.stop1)
-      DownHP()
-}
-else{
-  if(player.alive && enemy.alive){
-    timer--
-  }
-  else{
-    clearInterval(startTimer.stop1)
-    DownHP()
-  }
-  
-}
-}
 
 
-function DownHP(){
-    let stop2 = setInterval(function(){
-      if(enemy.alive && player.alive){
-        enemyBar.width -= pEnemyWidth
-        enemyBar.position.x += pEnemyWidth
-        playerBar.width -= pBarWidth
-        
-        console.log('minus')
-        if(playerBar.width < 0){
-          playerBar.width = 0
-          player.alive = false
-          enemy.score++
-          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
-          clearInterval(stop2)
-          restart()
-        }
-        if(enemyBar.width < 0){
-          enemyBar.width = 0
-          enemy.alive = false
-          player.score++
-          console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
-          clearInterval(stop2)
-          restart()
-        
-      }
-      }
-    },300)
 
 
-}
 
 
 
@@ -717,7 +789,7 @@ window.addEventListener('keydown', (event) => {
       break
   }
   if (pause){
-    if(player.alive){
+    if(player.alive && !player.isStunned){
         switch (event.key){
 
     // player keys - setting the current downkey to last key pressed
@@ -734,22 +806,34 @@ window.addEventListener('keydown', (event) => {
       player.attackBox.offset.x = -50
       break
     case 'w':
-      if(player.canJump){
+      if(player.canJump && !player.isBlocking){
         player.velocity.y = (-20 * jumpForce)
         player.canJump = false
       }
       
       break
     case 's':
-      
-      if (player.canAttack){
-        player.attack()
+      if (player.canCrouch){
+        player.canCrouch = false
       }
+      
+      
+      break
+      case 'f':
+        if (player.canAttack && !player.isBlocking){
+          player.attack()
+        }
+      break
+      case 'g':
+        if(player.canJump){
+          player.color = 'darkred'
+          player.isBlocking = true
+        }
       break
 
   }
     }
-    if(enemy.alive){
+    if(enemy.alive && !enemy.isStunned){
       switch (event.key){
 
         //enemy keys - setting the current downkey to last key pressed
@@ -771,17 +855,21 @@ window.addEventListener('keydown', (event) => {
           
         break
         case 'ArrowDown':
+          if (enemy.canCrouch){
+            enemy.canCrouch = false
+          }
           
-          if (enemy.canAttack){
+        break
+        case 'm':
+          if (enemy.canAttack && !enemy.isBlocking){
             enemy.attack()
           }
         break
-        case 'p':
-          
-          
-
-
-          
+        case 'n':
+          if(enemy.canJump){
+            enemy.color = 'darkblue'
+            enemy.isBlocking = true
+          }
         break
       }
     }
@@ -798,13 +886,10 @@ window.addEventListener('keyup', (event) => {
 
   
   switch (event.key){
-
-    
-
-
     // player
     // Switching off current key
     // Switching the last key pressed to the opposite just incase
+
     case 'd'
       :
       keys.d.pressed = false
@@ -817,8 +902,26 @@ window.addEventListener('keyup', (event) => {
     // case 's':
     //   player.canAttack = true
     //   break
+    case 's':
+      
+        player.canCrouch = true
+      
+      
+      
+      break
+      case 'f':
+        
+      break
+      case 'g':
+          player.color = 'red'
+          player.isBlocking = false
+      break
+  }
 
 
+
+     
+      switch (event.key){
     //enemy
     // Switching off current key
     // Switching the last key pressed to the opposite just incase
@@ -833,18 +936,32 @@ window.addEventListener('keyup', (event) => {
     break
 
     case 'ArrowDown':
-      //enemy.canAttack = true
+
+        enemy.canCrouch = true
+
       
-      break
+          
+    break
+    case 'm':
+      
+    break
+    case 'n':
+      enemy.color = 'blue'
+      enemy.isBlocking = false
+    break
+      
+     }
 
     
-  }
+  
 
   // Debug - Logging out which key went up
   //console.log(event.key + " keyup")
 
 })
 
+
+//WIP vs AI  (currently too powerful)
 function vsAI () {
   if (pause) {
     if (enemy.position.x < player.position.x) {
