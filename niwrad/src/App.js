@@ -64,8 +64,8 @@ const c = canvas.getContext('2d');
 
 
 // Canvas Size
-canvas.width = 1879;
-canvas.height = 958;
+canvas.width = 1024;
+canvas.height = 576;
 
 c.fillRect(0,0,canvas.width,canvas.height)
 
@@ -143,6 +143,12 @@ class Pic{
   update(){
       //This will run each frame
       this.draw()
+
+      
+      
+
+
+
       this.framesElapsed++
       if(this.direction == 'left' && this.currentFrame.x < this.editR){
         this.currentFrame.x = this.editR
@@ -179,7 +185,7 @@ const background = new Pic({
   height: canvas.height,
   scale:{
     x: 1,
-    y: 1.19
+    y: 1
   },
   framesMax:{
     x: 1,
@@ -193,8 +199,8 @@ const background = new Pic({
 
 const shop = new Pic({
   position:{
-    x: 1460,
-    y: 530
+    x: 630,
+    y: 79
   },
   imageSrc: s,
   width: 2000,
@@ -224,8 +230,8 @@ const playerRed = new Pic({
   width: 800,
   height: 800,
   scale:{
-    x: 4,
-    y: 4
+    x: 2,
+    y: 2
   },
   framesMax:{
     x: 8,
@@ -248,8 +254,8 @@ const playerBlue = new Pic({
   width: 800,
   height: 800,
   scale:{
-    x: 4,
-    y: 4
+    x: 2,
+    y: 2
   },
   framesMax:{
     x: 8,
@@ -267,7 +273,7 @@ const playerBlue = new Pic({
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 200, width = 200, state }){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 150, width = 50, state }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -771,16 +777,22 @@ function rectangularCollision({rectangle1, rectangle2}){
 // This is the infinite loop
 
 function animate(){
-  // Reset the simulation
+  // Reseting the simulation
+  if(pause){
   window.requestAnimationFrame(animate)
+  }
     //Global functions
     friction()
   
+
+
     
     //draw functions
-    c.fillStyle = 'blue'
+    
+    c.fillStyle = 'black'
     c.fillRect(0,0, canvas.width, canvas.height)
     background.update()
+    
     shop.update()
     player.update()
     enemy.update()
@@ -1078,6 +1090,7 @@ window.addEventListener('keydown', (event) => {
       case 'p':
         console.log(playerRed)
         console.log(playerRed.currentFrame)
+        
       break
   }
   if (pause){
