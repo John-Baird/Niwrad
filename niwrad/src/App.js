@@ -778,9 +778,9 @@ function rectangularCollision({rectangle1, rectangle2}){
 
 function animate(){
   // Reseting the simulation
-  if(pause){
   window.requestAnimationFrame(animate)
-  }
+  if (pause) {
+  
     //Global functions
     friction()
   
@@ -969,7 +969,7 @@ function animate(){
       
     }
 
-
+  }
   //vsAI()
 
 
@@ -1074,7 +1074,7 @@ window.addEventListener('keydown', (event) => {
 
     case 'Escape':
      if (pause){
-       pause = false 
+       pause = false
      }
      else{
        pause = true
@@ -1192,7 +1192,7 @@ window.addEventListener('keydown', (event) => {
   
 
   // Debug - Logging out which key went down
-  //console.log(event.key)
+  console.log(event.key)
 }
 })
 
