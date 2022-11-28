@@ -64,8 +64,8 @@ const c = canvas.getContext('2d');
 
 
 // Canvas Size
-canvas.width = 1024;
-canvas.height = 576;
+canvas.width = 1879;
+canvas.height = 958;
 
 c.fillRect(0,0,canvas.width,canvas.height)
 
@@ -179,7 +179,7 @@ const background = new Pic({
   height: canvas.height,
   scale:{
     x: 1,
-    y: 1
+    y: 1.19
   },
   framesMax:{
     x: 1,
@@ -193,8 +193,8 @@ const background = new Pic({
 
 const shop = new Pic({
   position:{
-    x: 630,
-    y: 79
+    x: 1460,
+    y: 530
   },
   imageSrc: s,
   width: 2000,
@@ -224,8 +224,8 @@ const playerRed = new Pic({
   width: 800,
   height: 800,
   scale:{
-    x: 2,
-    y: 2
+    x: 4,
+    y: 4
   },
   framesMax:{
     x: 8,
@@ -248,8 +248,8 @@ const playerBlue = new Pic({
   width: 800,
   height: 800,
   scale:{
-    x: 2,
-    y: 2
+    x: 4,
+    y: 4
   },
   framesMax:{
     x: 8,
@@ -267,7 +267,7 @@ const playerBlue = new Pic({
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 150, width = 50, state }){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 200, width = 200, state }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -771,14 +771,14 @@ function rectangularCollision({rectangle1, rectangle2}){
 // This is the infinite loop
 
 function animate(){
-  // Reseting the simulation
+  // Reset the simulation
   window.requestAnimationFrame(animate)
     //Global functions
     friction()
   
     
     //draw functions
-    c.fillStyle = 'black'
+    c.fillStyle = 'blue'
     c.fillRect(0,0, canvas.width, canvas.height)
     background.update()
     shop.update()
