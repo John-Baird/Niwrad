@@ -22,13 +22,15 @@ import { Button } from 'bootstrap';
 //TODO Fix animation
 
 
-// Add a starting menu
-// Add 2 player and AI, leave multiplayer for later
+// Add a starting menu (View 2)
+// Add a Pause Menu (View 3)
+// Add a character selection screen (View 4)
+// Add 2 player and AI, leave multiplayer for later (on starting screen)
 // launch demo
-// Add loading screen
 // Add music and noise
-// Add changing backgrounds and different character color selects
+// Add changing backgrounds and different character color sets (on character selection screen)
 // Add multiplayer lobbies
+// Add loading screen (View 5?)
 
 
 function App() {
