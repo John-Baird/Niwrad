@@ -19,7 +19,7 @@ import { Button } from 'bootstrap';
 // Add current state of player/enemy
 // Add animations according to the state
 
-//TODO Fix animation
+//TODO Fix animation - (on state change, set the current.frame.x to the starting frame (editR)    &  fix ending if else statement)
 
 
 // Add a starting menu (View 2)
@@ -54,9 +54,6 @@ function App() {
 
 export default App;
 
-function Test(){
-  pause = true
-}
 
 
 //Setting the canvas to a variable 'c'
@@ -164,7 +161,7 @@ class Pic{
           if(this.direction == 'left' && this.currentFrame.x < 2){
             this.currentFrame.x = this.editL
           }
-          else{
+          else {
             this.currentFrame.x = 0
           }
           if(this == playerRed){
