@@ -12,6 +12,7 @@ import PL1 from './img/purple/PL1.png'
 
 import PR1 from './img/purple/PR1.png'
 import PR2 from './img/purple/PR2.png'
+import { Button } from 'bootstrap';
 
 //TODO
 // Add blocking
@@ -36,6 +37,7 @@ function App() {
   return (
     <div className="App">
       
+      <button onclick={Test()}>Start Game</button>
   
       
 
@@ -50,7 +52,9 @@ function App() {
 
 export default App;
 
-
+function Test(){
+  pause = true
+}
 
 
 //Setting the canvas to a variable 'c'
@@ -140,11 +144,20 @@ class Pic{
       //This will run each frame
       this.draw()
       this.framesElapsed++
+      if(this.direction == 'left' && this.currentFrame.x < this.editR){
+        this.currentFrame.x = this.editR
+      }
       if (this.framesElapsed % this.framesHold === 0){
         
         this.currentFrame.x ++
-        if ((this.currentFrame.x + this.editL)  >= this.framesMax.x - this.editR){
-          this.currentFrame.x = 0
+        if ((this.currentFrame.x)  >= this.framesMax.x - this.editL){
+          
+          if(this.direction == 'left' && this.currentFrame.x < 2){
+            this.currentFrame.x = this.editL
+          }
+          else{
+            this.currentFrame.x = 0
+          }
           if(this == playerRed){
             console.log("lap")
           }
@@ -222,7 +235,7 @@ const playerRed = new Pic({
     x: 0,
     y: 0
   },
-  framesHold: 10,
+  framesHold: 20,
   editR: 2,
   editL: 0
 })
