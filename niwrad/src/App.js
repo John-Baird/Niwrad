@@ -39,7 +39,7 @@ function App() {
   return (
     <div className="App">
       
-      <button onclick={Test()}>Start Game</button>
+      <button onClick={pauseScreen}>Start Game</button>
   
       
 
@@ -1062,7 +1062,14 @@ function startTimer(){
 
 
 
-
+function pauseScreen(){
+  if (pause){
+    pause = false
+  }
+  else{
+    pause = true
+  }
+}
 
 
 
