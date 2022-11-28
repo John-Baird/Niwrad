@@ -153,6 +153,7 @@ class Pic{
       if(this.direction == 'left' && this.currentFrame.x < this.editR){
         this.currentFrame.x = this.editR
       }
+       
       if (this.framesElapsed % this.framesHold === 0){
         
         this.currentFrame.x ++
@@ -778,9 +779,9 @@ function rectangularCollision({rectangle1, rectangle2}){
 
 function animate(){
   // Reseting the simulation
-  window.requestAnimationFrame(animate)
-  if (pause) {
   
+  window.requestAnimationFrame(animate)
+  if(pause){
     //Global functions
     friction()
   
@@ -1073,6 +1074,7 @@ window.addEventListener('keydown', (event) => {
     // This is the pause
 
     case 'Escape':
+      console.log('hit esc')
      if (pause){
        pause = false
      }
@@ -1090,7 +1092,7 @@ window.addEventListener('keydown', (event) => {
       case 'p':
         console.log(playerRed)
         console.log(playerRed.currentFrame)
-        
+        console.log(pause)
       break
   }
   if (pause){
