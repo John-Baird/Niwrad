@@ -91,6 +91,9 @@ const jumpForce = .8
 // This is the pause
 let pause = true
 
+let VsAI = false
+let VsHuman = true
+
 //Image Creator WIP
 
 class Pic{
@@ -1285,8 +1288,10 @@ window.addEventListener('keyup', (event) => {
 })
 
 
-//WIP vs AI  (currently too powerful)
+
+//WIP vs AI  (currently too powerful) VsAi and VsHuman added, start screen functionality needed to work.
 function vsAI () {
+if (VsAI) {
   if (pause) {
     if (enemy.position.x < player.position.x) {
       keys.ArrowRight.pressed = true
@@ -1319,6 +1324,9 @@ function vsAI () {
     keys.ArrowRight.pressed = false
     keys.ArrowLeft.pressed = false
   }
+} else if (VsHuman) {
+  //player and enemy controls needed to be imported here
+}
   
 
 
