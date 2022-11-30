@@ -156,10 +156,13 @@ class Pic{
       // if(this.direction == 'left' && this.currentFrame.x < this.editR){
       //   this.currentFrame.x = this.editR
       // }
-
+      // console.log("prev")
+      // console.log(playerBlue.previousFrame)
+      // console.log("current")
+      // console.log(playerBlue.currentFrame.y)
 
       if(this.previousFrame == this.currentFrame.y){
-
+        
       }
       else{
         console.log("state change")
@@ -171,17 +174,17 @@ class Pic{
         }
         
       }
-      if (this.framesElapsed % (this.framesHold/2) === 0){
+      if (this.framesElapsed % (this.framesHold*6) === 0){
         if(this.direction == 'left'){
           this.currentFrame.x --
-          if ((this.currentFrame.x)  <= this.framesMax.x - this.editR){
-            this.currentFrame.x = 0
+          if ((this.currentFrame.x)  <= this.editL){
+            this.currentFrame.x = 7
             
           }
         }
         if(this.direction == 'right'){
           this.currentFrame.x ++
-          if ((this.currentFrame.x)  >= this.framesMax.x - this.editL){
+          if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
             this.currentFrame.x = 0
             
           }
@@ -410,12 +413,12 @@ class Sprite {
 
     if(player.velocity.x > 0){
       playerRed.image.src = PR1
-      playerRed.direction = 'left'
+      playerRed.direction = 'right'
       
     }
     if(player.velocity.x < 0){
       playerRed.image.src = PL1
-      playerRed.direction = 'right'
+      playerRed.direction = 'left'
       
       
     }
@@ -562,7 +565,7 @@ class Sprite {
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 9
-        playerBlue.editR = 5
+        playerBlue.editR =5
         playerBlue.framesHold = 10
       }
     }
@@ -1247,7 +1250,7 @@ window.addEventListener('keydown', (event) => {
   
 
   // Debug - Logging out which key went down
-  console.log(event.key)
+  //console.log(event.key)
 }
 })
 
