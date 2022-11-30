@@ -156,7 +156,10 @@ class Pic{
       // if(this.direction == 'left' && this.currentFrame.x < this.editR){
       //   this.currentFrame.x = this.editR
       // }
-
+      // console.log("prev")
+      // console.log(playerBlue.previousFrame)
+      // console.log("current")
+      // console.log(playerBlue.currentFrame.y)
 
       if(this.previousFrame == this.currentFrame.y){
         
@@ -171,17 +174,17 @@ class Pic{
         }
         
       }
-      if (this.framesElapsed % (this.framesHold/2) === 0){
+      if (this.framesElapsed % (this.framesHold) === 0){
         if(this.direction == 'left'){
           this.currentFrame.x --
-          if ((this.currentFrame.x)  <= this.framesMax.x - this.editR){
+          if ((this.currentFrame.x)  <= this.editL){
             this.currentFrame.x = 7
             
           }
         }
         if(this.direction == 'right'){
           this.currentFrame.x ++
-          if ((this.currentFrame.x)  >= this.framesMax.x - this.editL){
+          if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
             this.currentFrame.x = 0
             
           }
@@ -470,9 +473,18 @@ class Sprite {
       playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 5
-        playerRed.editR = 5
         playerRed.framesHold = 10
-        
+        if(playerRed.direction == 'left'){
+          playerRed.editR = 0
+          playerRed.editL = 5
+         
+        }
+        if(playerRed.direction == 'right'){
+          playerRed.editR = 5
+          playerRed.editL = 0
+          
+
+        }
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 5
@@ -524,9 +536,19 @@ class Sprite {
       playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 3
-        playerRed.editR = 2
-        playerRed.framesHold = 8
         
+        playerRed.framesHold = 8
+        if(playerRed.direction == 'left'){
+          playerRed.editR = 0
+          playerRed.editL = 2
+          
+        }
+        if(playerRed.direction == 'right'){
+          playerRed.editR = 2
+          playerRed.editL = 0
+          
+
+        }
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 3
@@ -540,9 +562,18 @@ class Sprite {
       playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 10
-        playerRed.editR = 5
         playerRed.framesHold = 10
-        
+        if(playerRed.direction == 'left'){
+          playerRed.editR = 0
+          playerRed.editL = 5
+          
+        }
+        if(playerRed.direction == 'right'){
+          playerRed.editR = 5
+          playerRed.editL = 0
+          
+
+        }
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 10
@@ -556,9 +587,19 @@ class Sprite {
       playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 9
-        playerRed.editR = 5
-        playerRed.framesHold = 10
         
+        playerRed.framesHold = 10
+        if(playerRed.direction == 'left'){
+          playerRed.editR = 0
+          playerRed.editL = 5
+          
+        }
+        if(playerRed.direction == 'right'){
+          playerRed.editR = 5
+          playerRed.editL = 0
+          
+
+        }
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 9
@@ -645,15 +686,15 @@ class Sprite {
         if (this.name == "enemy"){
           i = -1
         }
-        if(player.position.x+player.width < enemy.position.x){
+        if(player.position.x+player.width > enemy.position.x){
           this.velocity.y = -10
-          this.velocity.x = -20*i
+          this.velocity.x = 20*i
           this.canJump = false
           this.stun(500)
         }
-        if(player.position.x > enemy.position.x+enemy.width){
+        if(player.position.x < enemy.position.x+enemy.width){
           this.velocity.y = -10
-          this.velocity.x = 20*i
+          this.velocity.x = -20*i
           this.canJump = false
           this.stun(500)
         }
@@ -1248,7 +1289,7 @@ window.addEventListener('keydown', (event) => {
   
 
   // Debug - Logging out which key went down
-  console.log(event.key)
+  //console.log(event.key)
 }
 })
 
