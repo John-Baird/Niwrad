@@ -97,7 +97,7 @@ let VsHuman = true
 //Image Creator WIP
 
 class Pic{
-  constructor({position, name, imageSrc, height = canvas.height, width = canvas.width, scale = 1, framesMax = 1, currentFrame = 0,previousFrame = 0, framesElapsed = 0, framesHold = 10, direction = 'right', editR = 0, editL = 0}){
+  constructor({position, name, imageSrc, height = canvas.height, width = canvas.width, scale = 1, framesMax = 1, currentFrame = 0,previousFrame = 0, framesElapsed = 0, framesHold = 10, direction = 'right', editR = 7, editL = 0}){
     this.position = position
     this.name = name
     this.editL = editL
@@ -159,7 +159,7 @@ class Pic{
 
 
       if(this.previousFrame == this.currentFrame.y){
-
+        
       }
       else{
         console.log("state change")
@@ -175,7 +175,7 @@ class Pic{
         if(this.direction == 'left'){
           this.currentFrame.x --
           if ((this.currentFrame.x)  <= this.framesMax.x - this.editR){
-            this.currentFrame.x = 0
+            this.currentFrame.x = 7
             
           }
         }
@@ -387,7 +387,7 @@ class Sprite {
         this.canMoveRight = true
       }
       if (this.position.x <= 0){
-        console.log(this.name +" out of bounds left")
+        console.log(this.name +" is out of bounds left")
         this.canMoveLeft = false
         this.velocity.x = 0
         
@@ -410,12 +410,12 @@ class Sprite {
 
     if(player.velocity.x > 0){
       playerRed.image.src = PR1
-      playerRed.direction = 'left'
+      playerRed.direction = 'right'
       
     }
     if(player.velocity.x < 0){
       playerRed.image.src = PL1
-      playerRed.direction = 'right'
+      playerRed.direction = 'left'
       
       
     }
@@ -591,13 +591,13 @@ class Sprite {
           
           playerRed.framesHold = 10
           if(playerRed.direction == 'left'){
-            playerRed.editR = 2
-            playerRed.editL = 0
+            playerRed.editR = 0
+            playerRed.editL = 2
             
           }
           if(playerRed.direction == 'right'){
-            playerRed.editL = 2
-            playerRed.editR = 0
+            playerRed.editL = 0
+            playerRed.editR = 2
             
 
           }
