@@ -174,7 +174,7 @@ class Pic{
         }
         
       }
-      if (this.framesElapsed % (this.framesHold*6) === 0){
+      if (this.framesElapsed % (this.framesHold) === 0){
         if(this.direction == 'left'){
           this.currentFrame.x --
           if ((this.currentFrame.x)  <= this.editL){
@@ -473,9 +473,18 @@ class Sprite {
       playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 5
-        playerRed.editR = 5
         playerRed.framesHold = 10
-        
+        if(playerRed.direction == 'left'){
+          playerRed.editR = 0
+          playerRed.editL = 5
+         
+        }
+        if(playerRed.direction == 'right'){
+          playerRed.editR = 5
+          playerRed.editL = 0
+          
+
+        }
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 5
@@ -527,9 +536,19 @@ class Sprite {
       playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 3
-        playerRed.editR = 2
-        playerRed.framesHold = 8
         
+        playerRed.framesHold = 8
+        if(playerRed.direction == 'left'){
+          playerRed.editR = 0
+          playerRed.editL = 2
+          
+        }
+        if(playerRed.direction == 'right'){
+          playerRed.editR = 2
+          playerRed.editL = 0
+          
+
+        }
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 3
@@ -543,9 +562,18 @@ class Sprite {
       playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 10
-        playerRed.editR = 5
         playerRed.framesHold = 10
-        
+        if(playerRed.direction == 'left'){
+          playerRed.editR = 0
+          playerRed.editL = 5
+          
+        }
+        if(playerRed.direction == 'right'){
+          playerRed.editR = 5
+          playerRed.editL = 0
+          
+
+        }
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 10
@@ -559,13 +587,23 @@ class Sprite {
       playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 9
-        playerRed.editR = 5
-        playerRed.framesHold = 10
         
+        playerRed.framesHold = 10
+        if(playerRed.direction == 'left'){
+          playerRed.editR = 0
+          playerRed.editL = 5
+          
+        }
+        if(playerRed.direction == 'right'){
+          playerRed.editR = 5
+          playerRed.editL = 0
+          
+
+        }
       }
       if(this == enemy){
         playerBlue.currentFrame.y = 9
-        playerBlue.editR =5
+        playerBlue.editR = 5
         playerBlue.framesHold = 10
       }
     }
@@ -594,13 +632,13 @@ class Sprite {
           
           playerRed.framesHold = 10
           if(playerRed.direction == 'left'){
-            playerRed.editR = 2
-            playerRed.editL = 0
+            playerRed.editR = 0
+            playerRed.editL = 2
             
           }
           if(playerRed.direction == 'right'){
-            playerRed.editL = 2
-            playerRed.editR = 0
+            playerRed.editL = 0
+            playerRed.editR = 2
             
 
           }
@@ -648,15 +686,15 @@ class Sprite {
         if (this.name == "enemy"){
           i = -1
         }
-        if(player.position.x+player.width < enemy.position.x){
+        if(player.position.x+player.width > enemy.position.x){
           this.velocity.y = -10
-          this.velocity.x = -20*i
+          this.velocity.x = 20*i
           this.canJump = false
           this.stun(500)
         }
-        if(player.position.x > enemy.position.x+enemy.width){
+        if(player.position.x < enemy.position.x+enemy.width){
           this.velocity.y = -10
-          this.velocity.x = 20*i
+          this.velocity.x = -20*i
           this.canJump = false
           this.stun(500)
         }
