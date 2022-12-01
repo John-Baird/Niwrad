@@ -228,7 +228,7 @@ class Pic{
             }
           }
 
-          
+
         
         
       }
@@ -606,7 +606,7 @@ class Sprite {
         playerRed.framesHold = 10
         if(playerRed.direction == 'left'){
           playerRed.editR = 0
-          playerRed.editL = 5
+          playerRed.editL = 4
           
         }
         if(playerRed.direction == 'right'){
@@ -698,10 +698,14 @@ class Sprite {
     attack() {
       
       this.isAttacking = true
-      this.canAttack = false
+      
       setTimeout(() => {
         this.isAttacking = false
+        this.canAttack = false
       }, 300)
+      
+      
+      
     }
 
     // Stunned
@@ -1145,8 +1149,8 @@ function restart(){
     enemy.velocity.x = 0
     enemy.velocity.y = 0
     enemyBar.position.x = (canvas.width*.6)-(canvas.width*0.05)
-    player.canAttack = false
-    enemy.canAttack = false
+    player.canAttack = true
+    enemy.canAttack = true
     timer = 100
     pause = true
     
@@ -1422,7 +1426,7 @@ window.addEventListener('keyup', (event) => {
 
 
 
-//WIP vs AI  (currently too powerful) VsAi and VsHuman added, start screen functionality needed to work.
+//WIP vs AI  (currently too powerful) VsAi and VsHuman added, start screen functionality ne1eded to work.
 function vsAI () {
   if (VsAI) {
     if (pause) {
