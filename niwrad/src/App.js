@@ -129,7 +129,7 @@ class Pic{
       c.drawImage(this.image,
 
         this.currentFrame.x * (this.image.width / this.framesMax.x),
-        this.currentFrame.y * (this.image.height / this.framesMax.y),
+        this.currentFrame.y * (this.image.height / this.framesMax.y)+5,
 
         (this.image.width  / this.framesMax.x),
         (this.image.height / this.framesMax.y),
@@ -181,20 +181,54 @@ class Pic{
         
       }
       if (this.framesElapsed % (this.framesHold) === 0){
-        if(this.direction == 'left'){
-          this.currentFrame.x --
-          if ((this.currentFrame.x)  <= this.editL){
-            this.currentFrame.x = 7
-            
+
+
+        if(this == playerRed){
+          if(player.state == 'blocking'){
+            if(this.direction == 'left'){
+              this.currentFrame.x --
+              if ((this.currentFrame.x)  <= this.editL){
+                this.currentFrame.x = 6
+              }
+            }
+            if(this.direction == 'right'){
+              this.currentFrame.x ++
+              if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                this.currentFrame.x = 1
+              }
+            }
           }
-        }
-        if(this.direction == 'right'){
-          this.currentFrame.x ++
-          if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
-            this.currentFrame.x = 0
-            
+          else{
+            if(this.direction == 'left'){
+              this.currentFrame.x --
+              if ((this.currentFrame.x)  <= this.editL){
+                this.currentFrame.x = 7
+              }
+            }
+            if(this.direction == 'right'){
+              this.currentFrame.x ++
+              if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                this.currentFrame.x = 0
+              }
+            }
           }
-        }
+          }
+          if(this == background || this == playerBlue){
+            if(this.direction == 'left'){
+              this.currentFrame.x --
+              if ((this.currentFrame.x)  <= this.editL){
+                this.currentFrame.x = 7
+              }
+            }
+            if(this.direction == 'right'){
+              this.currentFrame.x ++
+              if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                this.currentFrame.x = 0
+              }
+            }
+          }
+
+          
         
         
       }
@@ -229,7 +263,8 @@ const background = new Pic({
 const shop = new Pic({
   position:{
     x: 630,
-    y: 79
+    y: 90
+
   },
   imageSrc: s,
   width: 2000,
@@ -302,7 +337,7 @@ const playerBlue = new Pic({
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 150, width = 50, state }){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -415,8 +450,9 @@ class Sprite {
 
     
     let state = ['idle','normal attack','critical attack', 'jumping up', 'falling down', 'sliding down wall', 'knocked', 'blocking', 'crouching', 'stunned', 'dying', 'running']
-    playerRed.previousFrame = playerRed.currentFrame.y
-    playerBlue.previousFrame = playerBlue.currentFrame.y
+    
+    
+    console.log(playerRed.currentFrame.x + " first")
 
     if(player.velocity.x > 0){
       playerRed.image.src = PR1
@@ -427,14 +463,20 @@ class Sprite {
       playerRed.image.src = PL1
       playerRed.direction = 'left'
       
-      
     }
-
+    if(playerRed.previousFrame !== playerRed.currentFrame.y){
+      if(this.direction == 'right'){
+        this.currentFrame.x = 0
+      }
+      else if(this.direction == 'left'){
+        this.currentFrame.x = 7
+      }
+    }
+    else{
     
     if(!this.alive){
       this.state = 'dying'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 6
         playerRed.editR = 0
@@ -449,8 +491,7 @@ class Sprite {
     }
     else if(this.isAttacking && this.isFalling){
       this.state = 'critAttk'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         
       }
@@ -460,8 +501,7 @@ class Sprite {
     }
     else if(this.isAttacking){
       this.state = 'normAttk'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 1
         playerRed.editR = 2
@@ -476,8 +516,7 @@ class Sprite {
     }
     else if(this.isStunned){
       this.state = 'knocked'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 5
         playerRed.framesHold = 10
@@ -501,8 +540,7 @@ class Sprite {
     }
     else if (this.position.x >= canvas.width && this.isFalling){
       this.state = 'slidingRight'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         
       }
@@ -512,8 +550,7 @@ class Sprite {
     }
     else if (this.position.x <= 0 && this.isFalling){
       this.state = 'slidingLeft'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         
       }
@@ -523,8 +560,7 @@ class Sprite {
     }
     else if(this.isFalling){
       this.state = 'falling down'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 4
         playerRed.editR = 0
@@ -539,8 +575,7 @@ class Sprite {
     }
     else if(this.velocity.y < 0){
       this.state = 'jumping up'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 3
         
@@ -565,8 +600,7 @@ class Sprite {
     }
     else if(this.isBlocking){
       this.state = 'blocking'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 10
         playerRed.framesHold = 10
@@ -590,8 +624,7 @@ class Sprite {
     }
     else if (this.isCrouching){
       this.state = 'crouching'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 9
         
@@ -616,8 +649,7 @@ class Sprite {
     }
     else if(this.velocity.x !== 0){
       this.state = 'running'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 2
         playerRed.editR = 0
@@ -634,23 +666,23 @@ class Sprite {
         this.state = 'idle'
         playerRed.previousFrame = playerRed.currentFrame.y
         playerBlue.previousFrame = playerBlue.currentFrame.y
-        if (this == player){
+        if (this === player){
           playerRed.currentFrame.y = 0
           
           playerRed.framesHold = 10
-          if(playerRed.direction == 'left'){
+          if(playerRed.direction === 'left'){
             playerRed.editR = 0
             playerRed.editL = 2
             
           }
-          if(playerRed.direction == 'right'){
+          if(playerRed.direction === 'right'){
             playerRed.editL = 0
             playerRed.editR = 2
             
 
           }
         }
-        if(this == enemy){
+        if(this === enemy){
           playerBlue.currentFrame.y = 0
           playerBlue.editR = 2
           playerBlue.framesHold = 10
@@ -659,6 +691,8 @@ class Sprite {
     
       //console.log(this.state)
 
+    }
+    console.log(playerRed.currentFrame.x + " second")
   }
     //attack lasts .1 seconds
     attack() {
@@ -687,10 +721,10 @@ class Sprite {
       
       console.log(this.name)
         let i=1
-        if (this.name == "player"){
+        if (this.name === "player"){
           i = 1
         }
-        if (this.name == "enemy"){
+        if (this.name === "enemy"){
           i = -1
         }
         if(player.position.x+player.width > enemy.position.x){
@@ -719,7 +753,7 @@ class Sprite {
 const player = new Sprite({
   position:{
     x: 10,
-    y: 0
+    y: 100
   },
   velocity:{
     x: 0,
@@ -805,7 +839,7 @@ const enemyBar = new Sprite({
 
 
 
-// Checking if certain kyes are currently pressed
+// Checking if certain keys are currently pressed
 
 const keys = {
   a: {
@@ -895,10 +929,14 @@ function animate(){
     enemy.update()
     playerRed.update()
     playerRed.position.x = player.position.x-70
-    playerRed.position.y = player.position.y
+    playerRed.position.y = player.position.y-38
     playerBlue.update()
     playerBlue.position.x = enemy.position.x-70
-    playerBlue.position.y = enemy.position.y
+    playerBlue.position.y = enemy.position.y-38
+
+    
+    playerRed.previousFrame = playerRed.currentFrame.y
+
     
     
     playerBar.draw()
@@ -906,7 +944,7 @@ function animate(){
     player.status()
     enemy.status()
     
-
+    
     
 
     //player.velocity.x = 0;
@@ -1430,5 +1468,3 @@ function vsAI () {
 
 
   
-
-
