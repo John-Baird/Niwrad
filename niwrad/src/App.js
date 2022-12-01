@@ -190,11 +190,27 @@ class Pic{
               if ((this.currentFrame.x)  <= this.editL){
                 this.currentFrame.x = 6
               }
+              
             }
             if(this.direction == 'right'){
               this.currentFrame.x ++
               if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
                 this.currentFrame.x = 1
+              }
+            }
+          }
+          else if(player.state == 'dying'){
+            if(this.direction == 'left'){
+              this.currentFrame.x --
+              if ((this.currentFrame.x)  <= this.editL){
+                this.currentFrame.x = 4
+              }
+              
+            }
+            if(this.direction == 'right'){
+              this.currentFrame.x ++
+              if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                this.currentFrame.x = 3
               }
             }
           }
@@ -337,7 +353,7 @@ const playerBlue = new Pic({
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state }){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state,attka }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -373,6 +389,7 @@ class Sprite {
       y: 20
     }
     this.state = state
+    this.attka = attka
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
@@ -499,7 +516,7 @@ class Sprite {
 
       }
     }
-    else if(this.isAttacking){
+    else if(this.attka){
       this.state = 'normAttk'
       
       if (this == player){
@@ -606,7 +623,7 @@ class Sprite {
         playerRed.framesHold = 10
         if(playerRed.direction == 'left'){
           playerRed.editR = 0
-          playerRed.editL = 5
+          playerRed.editL = 4
           
         }
         if(playerRed.direction == 'right'){
@@ -699,8 +716,10 @@ class Sprite {
       
       this.isAttacking = true
       this.canAttack = false
+      this.attka = true
       setTimeout(() => {
         this.isAttacking = false
+        this.attka = false
       }, 300)
     }
 
@@ -1016,6 +1035,7 @@ function animate(){
       rectangle2: enemy
     }) &&player.isAttacking)
         {
+
       player.isAttacking = false
       console.log("player attack sucessful")
       if(enemy.canAttack){
