@@ -364,7 +364,7 @@ class Sprite {
     if(this.alive){
       this.draw()
       this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-      this.attackBox.position.y = this.position.y
+      this.attackBox.position.y = this.position.y + this.attackBox.offset.y
   
       c.fillStyle = 'white'
       c.fillText(timer,canvas.width/2, 40)
@@ -728,7 +728,7 @@ const player = new Sprite({
   speed : 5,
   offset: {
     x: 0,
-    y: 0
+    y: 50
   },
   name: 'player'
 })
@@ -873,7 +873,9 @@ function rectangularCollision({rectangle1, rectangle2}){
 
 function animate(){
   // Reseting the simulation
-  
+  player.attackBox.offset.y = 25
+  enemy.attackBox.offset.y = 25
+
   window.requestAnimationFrame(animate)
   if(pause){
     //Global functions
