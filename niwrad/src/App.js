@@ -181,20 +181,54 @@ class Pic{
         
       }
       if (this.framesElapsed % (this.framesHold) === 0){
-        if(this.direction == 'left'){
-          this.currentFrame.x --
-          if ((this.currentFrame.x)  <= this.editL){
-            this.currentFrame.x = 7
-            
+
+
+        if(this == playerRed){
+          if(player.state == 'blocking'){
+            if(this.direction == 'left'){
+              this.currentFrame.x --
+              if ((this.currentFrame.x)  <= this.editL){
+                this.currentFrame.x = 6
+              }
+            }
+            if(this.direction == 'right'){
+              this.currentFrame.x ++
+              if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                this.currentFrame.x = 1
+              }
+            }
           }
-        }
-        if(this.direction == 'right'){
-          this.currentFrame.x ++
-          if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
-            this.currentFrame.x = 0
-            
+          else{
+            if(this.direction == 'left'){
+              this.currentFrame.x --
+              if ((this.currentFrame.x)  <= this.editL){
+                this.currentFrame.x = 7
+              }
+            }
+            if(this.direction == 'right'){
+              this.currentFrame.x ++
+              if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                this.currentFrame.x = 0
+              }
+            }
           }
-        }
+          }
+          if(this == background || this == playerBlue){
+            if(this.direction == 'left'){
+              this.currentFrame.x --
+              if ((this.currentFrame.x)  <= this.editL){
+                this.currentFrame.x = 7
+              }
+            }
+            if(this.direction == 'right'){
+              this.currentFrame.x ++
+              if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                this.currentFrame.x = 0
+              }
+            }
+          }
+
+          
         
         
       }
