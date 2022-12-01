@@ -129,7 +129,7 @@ class Pic{
       c.drawImage(this.image,
 
         this.currentFrame.x * (this.image.width / this.framesMax.x),
-        this.currentFrame.y * (this.image.height / this.framesMax.y)+5,
+        this.currentFrame.y * (this.image.height / this.framesMax.y)+5+5,
 
         (this.image.width  / this.framesMax.x),
         (this.image.height / this.framesMax.y),
