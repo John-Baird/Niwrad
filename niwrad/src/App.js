@@ -302,7 +302,7 @@ const playerBlue = new Pic({
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 150, width = 50, state }){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -718,7 +718,7 @@ class Sprite {
 const player = new Sprite({
   position:{
     x: 10,
-    y: 0
+    y: 100
   },
   velocity:{
     x: 0,
@@ -804,7 +804,7 @@ const enemyBar = new Sprite({
 
 
 
-// Checking if certain kyes are currently pressed
+// Checking if certain keys are currently pressed
 
 const keys = {
   a: {
@@ -872,7 +872,9 @@ function rectangularCollision({rectangle1, rectangle2}){
 
 function animate(){
   // Reseting the simulation
-  
+  player.attackBox.offset.y = -50
+  enemy.attackBox.offset.y = -50
+
   window.requestAnimationFrame(animate)
   if(pause){
     //Global functions
@@ -892,10 +894,10 @@ function animate(){
     enemy.update()
     playerRed.update()
     playerRed.position.x = player.position.x-70
-    playerRed.position.y = player.position.y
+    playerRed.position.y = player.position.y-50
     playerBlue.update()
     playerBlue.position.x = enemy.position.x-70
-    playerBlue.position.y = enemy.position.y
+    playerBlue.position.y = enemy.position.y-50
 
     
     playerRed.previousFrame = playerRed.currentFrame.y
