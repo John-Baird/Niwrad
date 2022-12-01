@@ -20,6 +20,7 @@ import { Button } from 'bootstrap';
 // Add animations according to the state
 
 //TODO Fix animation - (on state change, set the current.frame.x to the starting frame (editR)    &  fix ending if else statement)
+// state change - correct direction on knockback hit - attack stopping short on hit
 
 
 // Add a starting menu (View 2)
@@ -162,10 +163,15 @@ class Pic{
       // console.log(playerBlue.currentFrame.y)
 
       if(this.previousFrame == this.currentFrame.y){
-        
+        if(this == playerRed){
+          
+        }
       }
       else{
-        console.log("state change")
+        if(this == playerRed){
+          console.log("state change")
+        }
+        
         if(this.direction == 'right'){
           this.currentFrame.x = 0
         }
@@ -409,7 +415,9 @@ class Sprite {
 
     
     let state = ['idle','normal attack','critical attack', 'jumping up', 'falling down', 'sliding down wall', 'knocked', 'blocking', 'crouching', 'stunned', 'dying', 'running']
-
+    
+    
+    console.log(playerRed.currentFrame.x + " first")
 
     if(player.velocity.x > 0){
       playerRed.image.src = PR1
@@ -420,14 +428,20 @@ class Sprite {
       playerRed.image.src = PL1
       playerRed.direction = 'left'
       
-      
     }
-
+    if(playerRed.previousFrame !== playerRed.currentFrame.y){
+      if(this.direction == 'right'){
+        this.currentFrame.x = 0
+      }
+      else if(this.direction == 'left'){
+        this.currentFrame.x = 7
+      }
+    }
+    else{
     
     if(!this.alive){
       this.state = 'dying'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 6
         playerRed.editR = 0
@@ -442,8 +456,7 @@ class Sprite {
     }
     else if(this.isAttacking && this.isFalling){
       this.state = 'critAttk'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         
       }
@@ -453,8 +466,7 @@ class Sprite {
     }
     else if(this.isAttacking){
       this.state = 'normAttk'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 1
         playerRed.editR = 2
@@ -469,8 +481,7 @@ class Sprite {
     }
     else if(this.isStunned){
       this.state = 'knocked'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 5
         playerRed.framesHold = 10
@@ -494,8 +505,7 @@ class Sprite {
     }
     else if (this.position.x >= canvas.width && this.isFalling){
       this.state = 'slidingRight'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         
       }
@@ -505,8 +515,7 @@ class Sprite {
     }
     else if (this.position.x <= 0 && this.isFalling){
       this.state = 'slidingLeft'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         
       }
@@ -516,8 +525,7 @@ class Sprite {
     }
     else if(this.isFalling){
       this.state = 'falling down'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 4
         playerRed.editR = 0
@@ -532,8 +540,7 @@ class Sprite {
     }
     else if(this.velocity.y < 0){
       this.state = 'jumping up'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 3
         
@@ -558,8 +565,7 @@ class Sprite {
     }
     else if(this.isBlocking){
       this.state = 'blocking'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 10
         playerRed.framesHold = 10
@@ -583,8 +589,7 @@ class Sprite {
     }
     else if (this.isCrouching){
       this.state = 'crouching'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 9
         
@@ -609,8 +614,7 @@ class Sprite {
     }
     else if(this.velocity.x !== 0){
       this.state = 'running'
-      playerRed.previousFrame = playerRed.currentFrame.y
-      playerBlue.previousFrame = playerBlue.currentFrame.y
+      
       if (this == player){
         playerRed.currentFrame.y = 2
         playerRed.editR = 0
@@ -627,23 +631,23 @@ class Sprite {
         this.state = 'idle'
         playerRed.previousFrame = playerRed.currentFrame.y
         playerBlue.previousFrame = playerBlue.currentFrame.y
-        if (this == player){
+        if (this === player){
           playerRed.currentFrame.y = 0
           
           playerRed.framesHold = 10
-          if(playerRed.direction == 'left'){
+          if(playerRed.direction === 'left'){
             playerRed.editR = 0
             playerRed.editL = 2
             
           }
-          if(playerRed.direction == 'right'){
+          if(playerRed.direction === 'right'){
             playerRed.editL = 0
             playerRed.editR = 2
             
 
           }
         }
-        if(this == enemy){
+        if(this === enemy){
           playerBlue.currentFrame.y = 0
           playerBlue.editR = 2
           playerBlue.framesHold = 10
@@ -652,6 +656,8 @@ class Sprite {
     
       //console.log(this.state)
 
+    }
+    console.log(playerRed.currentFrame.x + " second")
   }
     //attack lasts .1 seconds
     attack() {
@@ -680,10 +686,10 @@ class Sprite {
       
       console.log(this.name)
         let i=1
-        if (this.name == "player"){
+        if (this.name === "player"){
           i = 1
         }
-        if (this.name == "enemy"){
+        if (this.name === "enemy"){
           i = -1
         }
         if(player.position.x+player.width > enemy.position.x){
@@ -890,6 +896,10 @@ function animate(){
     playerBlue.update()
     playerBlue.position.x = enemy.position.x-70
     playerBlue.position.y = enemy.position.y
+
+    
+    playerRed.previousFrame = playerRed.currentFrame.y
+
     
     
     playerBar.draw()
@@ -897,7 +907,7 @@ function animate(){
     player.status()
     enemy.status()
     
-
+    
     
 
     //player.velocity.x = 0;
