@@ -129,7 +129,7 @@ class Pic{
       c.drawImage(this.image,
 
         this.currentFrame.x * (this.image.width / this.framesMax.x),
-        this.currentFrame.y * (this.image.height / this.framesMax.y)+5,
+        this.currentFrame.y * (this.image.height / this.framesMax.y)+5+5,
 
         (this.image.width  / this.framesMax.x),
         (this.image.height / this.framesMax.y),
@@ -190,11 +190,27 @@ class Pic{
               if ((this.currentFrame.x)  <= this.editL){
                 this.currentFrame.x = 6
               }
+              
             }
             if(this.direction == 'right'){
               this.currentFrame.x ++
               if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
                 this.currentFrame.x = 1
+              }
+            }
+          }
+          else if(player.state == 'dying'){
+            if(this.direction == 'left'){
+              this.currentFrame.x --
+              if ((this.currentFrame.x)  <= this.editL){
+                this.currentFrame.x = 4
+              }
+              
+            }
+            if(this.direction == 'right'){
+              this.currentFrame.x ++
+              if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                this.currentFrame.x = 3
               }
             }
           }
@@ -337,7 +353,7 @@ const playerBlue = new Pic({
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state }){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state,attka }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -373,6 +389,7 @@ class Sprite {
       y: 20
     }
     this.state = state
+    this.attka = attka
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
@@ -499,7 +516,7 @@ class Sprite {
 
       }
     }
-    else if(this.isAttacking){
+    else if(this.attka){
       this.state = 'normAttk'
       
       if (this == player){
@@ -698,10 +715,9 @@ class Sprite {
     attack() {
       
       this.isAttacking = true
-      
+      this.canAttack = false
       setTimeout(() => {
         this.isAttacking = false
-        this.canAttack = false
       }, 300)
       
       
@@ -1020,6 +1036,7 @@ function animate(){
       rectangle2: enemy
     }) &&player.isAttacking)
         {
+
       player.isAttacking = false
       console.log("player attack sucessful")
       if(enemy.canAttack){
@@ -1472,5 +1489,3 @@ function vsAI () {
 
 
   
-
-
