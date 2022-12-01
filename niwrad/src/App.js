@@ -129,7 +129,7 @@ class Pic{
       c.drawImage(this.image,
 
         this.currentFrame.x * (this.image.width / this.framesMax.x),
-        this.currentFrame.y * (this.image.height / this.framesMax.y),
+        this.currentFrame.y * (this.image.height / this.framesMax.y)+5,
 
         (this.image.width  / this.framesMax.x),
         (this.image.height / this.framesMax.y),
@@ -229,7 +229,8 @@ const background = new Pic({
 const shop = new Pic({
   position:{
     x: 630,
-    y: 79
+    y: 90
+
   },
   imageSrc: s,
   width: 2000,
@@ -894,10 +895,10 @@ function animate(){
     enemy.update()
     playerRed.update()
     playerRed.position.x = player.position.x-70
-    playerRed.position.y = player.position.y-50
+    playerRed.position.y = player.position.y-38
     playerBlue.update()
     playerBlue.position.x = enemy.position.x-70
-    playerBlue.position.y = enemy.position.y-50
+    playerBlue.position.y = enemy.position.y-38
 
     
     playerRed.previousFrame = playerRed.currentFrame.y
