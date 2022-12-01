@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+
 .App {
   text-align: center;
 }
@@ -35,4 +37,33 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.clasy{
+  cursor: url(https://cur.cursors-4u.net/games/gam-10/gam948.ani), url(https://cur.cursors-4u.net/games/gam-10/gam948.png), auto !important;
+  background-color: black;
+  height: 576px;
+  width: 1024px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 300%;
+}
+
+.option{
+  transition: .2s;
+  color: rgba(192, 192, 192, 0.76);
+}
+.option:hover{
+  transition: .5s;
+  color: rgba(255, 255, 255, 1); 
+  cursor: url(https://cur.cursors-4u.net/games/gam-10/gam948.ani), url(https://cur.cursors-4u.net/games/gam-10/gam948.png), auto !important;
+}
+
+
+.hide{
+  display: none;
+  visibility: hidden;
 }

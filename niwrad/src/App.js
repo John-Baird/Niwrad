@@ -1,6 +1,8 @@
 
 import './App.css';
 
+import React, { useState } from "react";
+
 import bg from './img/background.png'
 
 import s from './img/shop.png'
@@ -13,6 +15,12 @@ import PL1 from './img/purple/PL1.png'
 import PR1 from './img/purple/PR1.png'
 import PR2 from './img/purple/PR2.png'
 import { Button } from 'bootstrap';
+
+
+
+// Settings - World rules - keybinds - Audio/Customization
+// About me
+
 
 //TODO
 // Add blocking
@@ -36,14 +44,33 @@ import { Button } from 'bootstrap';
 
 function App() {
 
+  const [isActive, setActive] = useState("false");
+  const handleToggle = () => {
+    setActive(!isActive);
+  };
 
   return (
     <div className="App">
       
       <button onClick={pauseScreen}>Start Game</button>
-  
-      
+      <div className={isActive ? "hide" : null}>
 
+      
+      <div class="clasy">
+        <div class="option">
+          <p onClick={pauseScreen & handleToggle} >2 Player</p>
+        </div>
+        <div class="option">
+          <p>Vs AI</p>
+        </div>
+        <div>
+          <p class="option">
+            Online
+          </p>
+        </div>
+      </div>
+      
+      </div>
       
       
       
@@ -69,8 +96,7 @@ canvas.height = 576;
 
 c.fillRect(0,0,canvas.width,canvas.height)
 
-
-
+let FirstLoad = true
 
 
 //how high ground is from the bottom
@@ -257,7 +283,7 @@ class Pic{
 const background = new Pic({
   position:{
     x: 0,
-    y: 0
+    y: 5
   },
   imageSrc: bg, 
   width: canvas.width,
@@ -279,7 +305,7 @@ const background = new Pic({
 const shop = new Pic({
   position:{
     x: 630,
-    y: 90
+    y: 100
 
   },
   imageSrc: s,
@@ -395,19 +421,22 @@ class Sprite {
     //Draws out sprites and attack boxes
   draw() {
     // Drawing out red sprites
-    c.fillStyle = this.color
-    c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    if(this == playerBar || this == enemyBar){
+      c.fillStyle = this.color
+      c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+    
     
 
     //Drawing out sprite attack boxes
 
-   if (this.isAttacking){
-    c.fillStyle = 'green'
-    c.fillRect(this.attackBox.position.x,
-               this.attackBox.position.y,
-               this.attackBox.width,
-               this.attackBox.height )
-   }
+  //  if (this.isAttacking){
+  //   c.fillStyle = 'green'
+  //   c.fillRect(this.attackBox.position.x,
+  //              this.attackBox.position.y,
+  //              this.attackBox.width,
+  //              this.attackBox.height )
+  //  }
   }
 
       //Updating the sprite frame for frame
@@ -948,10 +977,10 @@ function animate(){
     enemy.update()
     playerRed.update()
     playerRed.position.x = player.position.x-70
-    playerRed.position.y = player.position.y-38
+    playerRed.position.y = player.position.y-30
     playerBlue.update()
     playerBlue.position.x = enemy.position.x-70
-    playerBlue.position.y = enemy.position.y-38
+    playerBlue.position.y = enemy.position.y-30
 
     
     playerRed.previousFrame = playerRed.currentFrame.y
@@ -1127,7 +1156,10 @@ function animate(){
   }
   //vsAI()
 
-
+ if(FirstLoad){
+  pauseScreen()
+  FirstLoad = false
+ }
 
 }
 
