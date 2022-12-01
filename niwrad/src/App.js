@@ -302,7 +302,7 @@ const playerBlue = new Pic({
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state }){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 150, width = 50, state }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -415,9 +415,8 @@ class Sprite {
 
     
     let state = ['idle','normal attack','critical attack', 'jumping up', 'falling down', 'sliding down wall', 'knocked', 'blocking', 'crouching', 'stunned', 'dying', 'running']
-    
-    
-    console.log(playerRed.currentFrame.x + " first")
+    playerRed.previousFrame = playerRed.currentFrame.y
+    playerBlue.previousFrame = playerBlue.currentFrame.y
 
     if(player.velocity.x > 0){
       playerRed.image.src = PR1
@@ -428,20 +427,14 @@ class Sprite {
       playerRed.image.src = PL1
       playerRed.direction = 'left'
       
+      
     }
-    if(playerRed.previousFrame !== playerRed.currentFrame.y){
-      if(this.direction == 'right'){
-        this.currentFrame.x = 0
-      }
-      else if(this.direction == 'left'){
-        this.currentFrame.x = 7
-      }
-    }
-    else{
+
     
     if(!this.alive){
       this.state = 'dying'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 6
         playerRed.editR = 0
@@ -456,7 +449,8 @@ class Sprite {
     }
     else if(this.isAttacking && this.isFalling){
       this.state = 'critAttk'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         
       }
@@ -466,7 +460,8 @@ class Sprite {
     }
     else if(this.isAttacking){
       this.state = 'normAttk'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 1
         playerRed.editR = 2
@@ -481,7 +476,8 @@ class Sprite {
     }
     else if(this.isStunned){
       this.state = 'knocked'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 5
         playerRed.framesHold = 10
@@ -505,7 +501,8 @@ class Sprite {
     }
     else if (this.position.x >= canvas.width && this.isFalling){
       this.state = 'slidingRight'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         
       }
@@ -515,7 +512,8 @@ class Sprite {
     }
     else if (this.position.x <= 0 && this.isFalling){
       this.state = 'slidingLeft'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         
       }
@@ -525,7 +523,8 @@ class Sprite {
     }
     else if(this.isFalling){
       this.state = 'falling down'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 4
         playerRed.editR = 0
@@ -540,7 +539,8 @@ class Sprite {
     }
     else if(this.velocity.y < 0){
       this.state = 'jumping up'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 3
         
@@ -565,7 +565,8 @@ class Sprite {
     }
     else if(this.isBlocking){
       this.state = 'blocking'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 10
         playerRed.framesHold = 10
@@ -589,7 +590,8 @@ class Sprite {
     }
     else if (this.isCrouching){
       this.state = 'crouching'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 9
         
@@ -614,7 +616,8 @@ class Sprite {
     }
     else if(this.velocity.x !== 0){
       this.state = 'running'
-      
+      playerRed.previousFrame = playerRed.currentFrame.y
+      playerBlue.previousFrame = playerBlue.currentFrame.y
       if (this == player){
         playerRed.currentFrame.y = 2
         playerRed.editR = 0
@@ -631,23 +634,23 @@ class Sprite {
         this.state = 'idle'
         playerRed.previousFrame = playerRed.currentFrame.y
         playerBlue.previousFrame = playerBlue.currentFrame.y
-        if (this === player){
+        if (this == player){
           playerRed.currentFrame.y = 0
           
           playerRed.framesHold = 10
-          if(playerRed.direction === 'left'){
+          if(playerRed.direction == 'left'){
             playerRed.editR = 0
             playerRed.editL = 2
             
           }
-          if(playerRed.direction === 'right'){
+          if(playerRed.direction == 'right'){
             playerRed.editL = 0
             playerRed.editR = 2
             
 
           }
         }
-        if(this === enemy){
+        if(this == enemy){
           playerBlue.currentFrame.y = 0
           playerBlue.editR = 2
           playerBlue.framesHold = 10
@@ -656,8 +659,6 @@ class Sprite {
     
       //console.log(this.state)
 
-    }
-    console.log(playerRed.currentFrame.x + " second")
   }
     //attack lasts .1 seconds
     attack() {
@@ -686,10 +687,10 @@ class Sprite {
       
       console.log(this.name)
         let i=1
-        if (this.name === "player"){
+        if (this.name == "player"){
           i = 1
         }
-        if (this.name === "enemy"){
+        if (this.name == "enemy"){
           i = -1
         }
         if(player.position.x+player.width > enemy.position.x){
@@ -718,7 +719,7 @@ class Sprite {
 const player = new Sprite({
   position:{
     x: 10,
-    y: 100
+    y: 0
   },
   velocity:{
     x: 0,
@@ -804,7 +805,7 @@ const enemyBar = new Sprite({
 
 
 
-// Checking if certain keys are currently pressed
+// Checking if certain kyes are currently pressed
 
 const keys = {
   a: {
@@ -872,9 +873,7 @@ function rectangularCollision({rectangle1, rectangle2}){
 
 function animate(){
   // Reseting the simulation
-  player.attackBox.offset.y = -50
-  enemy.attackBox.offset.y = -50
-
+  
   window.requestAnimationFrame(animate)
   if(pause){
     //Global functions
@@ -894,14 +893,10 @@ function animate(){
     enemy.update()
     playerRed.update()
     playerRed.position.x = player.position.x-70
-    playerRed.position.y = player.position.y-50
+    playerRed.position.y = player.position.y
     playerBlue.update()
     playerBlue.position.x = enemy.position.x-70
-    playerBlue.position.y = enemy.position.y-50
-
-    
-    playerRed.previousFrame = playerRed.currentFrame.y
-
+    playerBlue.position.y = enemy.position.y
     
     
     playerBar.draw()
@@ -909,7 +904,7 @@ function animate(){
     player.status()
     enemy.status()
     
-    
+
     
 
     //player.velocity.x = 0;
