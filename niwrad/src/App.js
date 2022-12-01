@@ -31,8 +31,8 @@ import { Button } from 'bootstrap';
 let P1RightColor = PR1
 let P1LeftColor = PL1
 
-let P2RightColor = RR1
-let P2LeftColor = RL1
+let P2RightColor = GR1
+let P2LeftColor = GL1
 
 let BackgroundVar = bg
 let ShopVar = s
@@ -565,11 +565,11 @@ class Sprite {
       player1.direction = 'left'
     }
     if(enemy.velocity.x > 0){
-      player2.image.src =P1RightColor
+      player2.image.src =P2RightColor
       player2.direction = 'right' 
     }
     if(enemy.velocity.x < 0){
-      player2.image.src = P1LeftColor
+      player2.image.src = P2LeftColor
       player2.direction = 'left'
     }
     if(player1.previousFrame !== player1.currentFrame.y){
