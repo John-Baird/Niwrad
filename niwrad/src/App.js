@@ -1,6 +1,7 @@
 
 import './App.css';
 
+
 import React, { useState } from "react";
 
 import bg from './img/background.png'
@@ -59,43 +60,185 @@ let ShopVar = s
 
 function App() {
 
-  const [isActive, setActive] = useState("false");
+  
+  const [howto, setHowto] = useState("");
+  const howtoToggle = () => {
+    setHowto(!howto);
+    
+    
+  };
+  const [isActive, setActive] = useState("");
   const handleToggle = () => {
     setActive(!isActive);
+    console.log(isActive)
+    
   };
+  const [open, setOpen] = useState("");
+  const openToggle = () => {
+    setOpen(!open);
+    
+    
+  };
+  const [settings, setSett] = useState("");
+  const settToggle = () => {
+    setSett(!settings);
+    
+    
+  };
+  const [pause, setPause] = useState("");
+  const pauseToggle = () => {
+    setPause(!pause);
+    
+    
+  };
+  window.addEventListener('keyup', (event) => {
 
+    switch (event.key){
+      // This is the pause
+  
+      case 'Escape':
+        
+        pauseToggle()
+       
+       break
+    }
+  })
   return (
     <div className="App">
-      
-      <button onClick={pauseScreen}>Start Game</button>
-      <div className={isActive ? "hide" : null}>
 
-      
-      <div class="clasy">
-        <div class="option">
-          <p onClick={pauseScreen & handleToggle} >2 Player</p>
-        </div>
-        <div class="option">
-          <p>Vs AI</p>
-        </div>
-        <div>
-          <p class="option">
-            Online
-          </p>
-        </div>
+<div className={howto ? '' : 'hide'}>
+        <div className='howto'>
+      <p>Player 1 - 🤸Arrow Keys   🗡️F   🛡️G</p>
+      <p>Player 2 - 🤸WASD   🗡️M   🛡️N</p>
+
+        <div className='option'>
+              <p onClick={event => {
+          howtoToggle();
+        }}>Go Back</p>
+            </div>
+          </div>
       </div>
-      
+
+
+      <div className={pause ? '' : 'hide'}>
+        <div className='pause'>
+      <div className="option">
+            <p onClick={event => {
+          pauseToggle();
+          pauseScreen();
+        }}>Resume</p>
+        </div>
+        <div className="option">
+            <p
+            onClick={event => {
+              
+              pauseToggle();
+              
+              handleToggle();
+            }}>Quit</p>
+        </div>
+
+        <div className="option">
+            <p onClick={event => {
+          howtoToggle();
+        }}>How to play</p>
+        </div>
+
+          </div>
       </div>
-      
+
+
+
+      <div className={settings ? '' : 'hide'}>
+        <div className='settings'>
+      <div className="option">
+            <p>Character Customization</p>
+        </div>
+        <div className="option">
+            <p onClick={event => {
+          howtoToggle();
+        }}>How to Play</p>
+        </div>
+
+        <div className="option">
+            <p>World Customization</p>
+        </div>
+
+        <div className='option'>
+              <p onClick={event => {
+          settToggle();
+        }}>Go Back</p>
+            </div>
+          </div>
+      </div>
+
+
+
+
+      <div className={open ? '' : 'hide'}>
+        <div className='comingSoon'>
+            <div>
+              <p>Coming Soon!</p>
+            </div>
+            <div className='option'>
+              <p onClick={event => {
+          openToggle();
+        }}>Go Back</p>
+            </div>
+          </div>
+      </div>
+      {/* <button onClick={pauseScreen}>Start Game</button> */}
+      <div id='bruh' className={isActive ? 'hide' : ''}>
+
+        
+        <div className="clasy">
+          
+          <div className="option">
+            <p  onClick={event => {
+          handleToggle();
+          pauseScreen();
+          restart();
+        }}> 2 Player</p>
+          </div>
+          <div className="option">
+            <p onClick={event => {
+          handleToggle();
+          pauseScreen();
+          restart();
+          VsAI = true
+        }}>Vs AI</p>
+          </div>
+          <div>
+            <p className="option" onClick={event => {
+          openToggle();
+        }}>
+              Online
+            </p>
+          </div>
+          <div className="option">
+            <p onClick={event => {
+          settToggle();
+        }}>Settings</p>
+        </div>
+        </div>
+        
+        </div>
+        
       
       
     
     </div>
-  );
+  )
 }
 
 
 export default App;
+
+window.onload = (event) => {
+  document.getElementById('bruh').classList.remove('hide')
+ 
+};
+
 
 
 
@@ -110,6 +253,7 @@ canvas.width = 1024;
 canvas.height = 576;
 
 c.fillRect(0,0,canvas.width,canvas.height)
+
 
 let FirstLoad = true
 
@@ -133,8 +277,8 @@ const jumpForce = .8
 // This is the pause
 let pause = true
 
-let VsAI = true
-let VsHuman = false
+let VsAI = false
+let VsHuman =  true
 
 //Image Creator WIP
 
@@ -363,7 +507,7 @@ class Pic{
 const background = new Pic({
   position:{
     x: 0,
-    y: 5
+    y: 0
   },
   imageSrc: BackgroundVar, 
   width: canvas.width,
@@ -385,7 +529,7 @@ const background = new Pic({
 const shop = new Pic({
   position:{
     x: 630,
-    y: 100
+    y: 90
 
   },
   imageSrc: ShopVar,
@@ -501,22 +645,19 @@ class Sprite {
     //Draws out sprites and attack boxes
   draw() {
     // Drawing out red sprites
-    if(this == playerBar || this == enemyBar){
-      c.fillStyle = this.color
-      c.fillRect(this.position.x, this.position.y, this.width, this.height)
-    }
-    
+    c.fillStyle = this.color
+    c.fillRect(this.position.x, this.position.y, this.width, this.height)
     
 
     //Drawing out sprite attack boxes
 
-  //  if (this.isAttacking){
-  //   c.fillStyle = 'green'
-  //   c.fillRect(this.attackBox.position.x,
-  //              this.attackBox.position.y,
-  //              this.attackBox.width,
-  //              this.attackBox.height )
-  //  }
+   if (this.isAttacking){
+    c.fillStyle = 'green'
+    c.fillRect(this.attackBox.position.x,
+               this.attackBox.position.y,
+               this.attackBox.width,
+               this.attackBox.height )
+   }
   }
 
       //Updating the sprite frame for frame
@@ -1096,12 +1237,12 @@ function animate(){
     shop.update()
     player.update()
     enemy.update()
-    playerRed.update()
-    playerRed.position.x = player.position.x-70
-    playerRed.position.y = player.position.y-30
-    playerBlue.update()
-    playerBlue.position.x = enemy.position.x-70
-    playerBlue.position.y = enemy.position.y-30
+    player1.update()
+    player1.position.x = player.position.x-70
+    player1.position.y = player.position.y-38
+    player2.update()
+    player2.position.x = enemy.position.x-70
+    player2.position.y = enemy.position.y-38
 
     
     player1.previousFrame = player1.currentFrame.y
@@ -1277,10 +1418,10 @@ function animate(){
   }
   vsAI()
 
- if(FirstLoad){
-  pauseScreen()
-  FirstLoad = false
- }
+  if(FirstLoad){
+    pauseScreen()
+    FirstLoad = false
+   }
 
 }
 
@@ -1391,6 +1532,7 @@ window.addEventListener('keydown', (event) => {
     case 'Escape':
       console.log('hit esc')
      pauseScreen()
+     
      break
       
     case ' ':
@@ -1644,6 +1786,3 @@ function vsAI () {
 
 
 }
-
-
-  
