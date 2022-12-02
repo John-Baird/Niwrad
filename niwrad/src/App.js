@@ -8,26 +8,21 @@ import bg from './img/background.png'
 
 import s from './img/shop.png'
 
-import PL2 from './img/purple/PL2.png'
 import PL1 from './img/purple/PL1.png'
 
 import PR1 from './img/purple/PR1.png'
-import PR2 from './img/purple/PR2.png'
 
 import BL1 from './img/blue/BL1.png'
 
 import BR1 from './img/blue/BR1.png'
-import BR2 from './img/blue/BR2.png'
 
 import GL1 from './img/green/GL1.png'
 
 import GR1 from './img/green/GR1.png'
-import GR2 from './img/green/GR2.png'
 
 import RL1 from './img/red/RL1.png'
 
 import RR1 from './img/red/RR1.png'
-import RR2 from './img/red/RR2.png'
 
 import { Button } from 'bootstrap';
 
@@ -469,14 +464,16 @@ class Pic{
             if(this.direction === 'left'){
               this.currentFrame.x --
               if ((this.currentFrame.x)  <= this.editL){
-                this.currentFrame.x = 4
+                this.currentFrame.x = 5
+                restart()
               }
               
             }
             if(this.direction === 'right'){
               this.currentFrame.x ++
               if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
-                this.currentFrame.x = 3
+                this.currentFrame.x = 4
+                restart()
               }
             }
           }
@@ -516,14 +513,17 @@ class Pic{
               if(this.direction === 'left'){
                 this.currentFrame.x --
                 if ((this.currentFrame.x)  <= this.editL){
-                  this.currentFrame.x = 4
+                  this.currentFrame.x = 5
+                  restart()
                 }
                 
               }
+              
               if(this.direction === 'right'){
                 this.currentFrame.x ++
                 if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
-                  this.currentFrame.x = 3
+                  this.currentFrame.x = 4
+                  restart()
                 }
               }
             }
@@ -1422,9 +1422,6 @@ function animate(){
           enemy.alive = false
           player.score++
           console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
-          setTimeout(() => {
-            restart()
-          }, 3000)
         }
         
       }
@@ -1470,9 +1467,6 @@ function animate(){
           player.alive = false
           enemy.score++
           console.log("Score - Player: "+player.score+" Enemy: "+enemy.score)
-          setTimeout(() => {
-            restart()
-          }, 3000)
         }
       }
       
