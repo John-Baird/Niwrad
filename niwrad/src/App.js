@@ -55,6 +55,12 @@ let ShopVar = s
 
 function App() {
 
+  const [keybind, setKeybind] = useState("");
+  const keybindToggle = () => {
+    setKeybind(!keybind);
+    
+    
+  };
   const [zaworldo, setZaworldo] = useState("");
   const zaworldoToggle = () => {
     setZaworldo(!zaworldo);
@@ -112,13 +118,41 @@ function App() {
   })
   return (
     <div className="App">
+      <div className={keybind ? '' : 'hide'}>
+        <div className='keybind'>
+      <div className='col'>
+        <p>Player 1</p>
+        <p>Jump</p>
+        <p>Crouch</p>
+        <p>Left</p>
+        <p>Right</p>
+        <p>Attack</p>
+        <p>Block</p>
+      </div>
+      <div className='col'>
+      <p>Player 2</p>
+        <p>Jump</p>
+        <p>Crouch</p>
+        <p>Left</p>
+        <p>Right</p>
+        <p>Attack</p>
+        <p>Block</p>
+      </div>
 
+        <div className='option'>
+              <p onClick={event => {
+          keybindToggle();
+        }}>Go Back</p>
+            </div>
+          </div>
+      </div>
 
 <div className={zaworldo ? '' : 'hide'}>
         <div className='zaworldo'>
           <div className='col'>
       <div className="option">
             <p>Speed</p>
+            
         </div>
         <div className="option">
             <p>Gravity</p>
@@ -195,7 +229,9 @@ function App() {
       <p>Player 1 - 🤸Arrow Keys   🗡️F   🛡️G</p>
       <p>Player 2 - 🤸WASD   🗡️M   🛡️N</p>
       <div className="option">
-            <p>Keybinds</p>
+            <p onClick={event => {
+          keybindToggle();
+        }}>Keybinds</p>
         </div>
         <div className='option'>
               <p onClick={event => {
@@ -669,7 +705,15 @@ const player1 = new Pic({
   },
   framesHold: 20,
   editR: 2,
-  editL: 0
+  editL: 0,
+  keybinds:{
+    left: 'a',
+    right: 'd',
+    jump: 'w',
+    crouch: 's',
+    attack: 'f',
+    block: 'g'
+  }
 })
 const player2 = new Pic({
   position:{
@@ -694,12 +738,20 @@ const player2 = new Pic({
   framesHold: 10,
   editR: 2,
   editL: 0,
+  keybinds:{
+    left: 'ArrowLeft',
+    right: 'ArrowRight',
+    jump: 'ArrowUp',
+    crouch: 'ArrowDown',
+    attack: 'm',
+    block: 'n'
+  }
 })
 
 // Sprite Creator
 
 class Sprite {
-  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state,attka }){
+  constructor({position, velocity, speed, color = 'red', offset, name, height = 100, width = 50, state,attka,keybinds }){
     this.position = position
     this.velocity = velocity
     this.name = name
@@ -736,6 +788,14 @@ class Sprite {
     }
     this.state = state
     this.attka = attka
+    this.keybinds = {
+      left: this.keybinds.left,
+      right: this.keybinds.right,
+      jump: this.keybinds.jump,
+      crouch: this.keybinds.crouch,
+      attack: this.keybinds.attack,
+      block: this.keybinds.block,
+    }
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
