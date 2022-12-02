@@ -631,7 +631,7 @@ class Pic{
       }
       else{
         if(this === player2){
-          console.log("state change")
+          // console.log("state change")
         }
         
         if(this.direction === 'right'){
@@ -799,7 +799,7 @@ const background = new Pic({
 const shop = new Pic({
   position:{
     x: 630,
-    y: 90
+    y: 100
 
   },
   imageSrc: ShopVar,
@@ -937,19 +937,24 @@ class Sprite {
     //Draws out sprites and attack boxes
   draw() {
     // Drawing out red sprites
-    c.fillStyle = this.color
-    c.fillRect(this.position.x, this.position.y, this.width, this.height)
+      if(this === playerBar || this === enemyBar){
+        c.fillStyle = this.color
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+      
+      }
+      
+   
     
 
     //Drawing out sprite attack boxes
 
-   if (this.isAttacking){
-    c.fillStyle = 'green'
-    c.fillRect(this.attackBox.position.x,
-               this.attackBox.position.y,
-               this.attackBox.width,
-               this.attackBox.height )
-   }
+  //  if (this.isAttacking){
+  //   c.fillStyle = 'green'
+  //   c.fillRect(this.attackBox.position.x,
+  //              this.attackBox.position.y,
+  //              this.attackBox.width,
+  //              this.attackBox.height )
+  //  }
   }
 
       //Updating the sprite frame for frame
@@ -1534,7 +1539,7 @@ function animate(){
   // Reseting the simulation
   player.attackBox.offset.y = 25
   enemy.attackBox.offset.y = 25
-  console.log(player2.currentFrame.x)
+  //console.log(player2.currentFrame.x)
   window.requestAnimationFrame(animate)
   if(pause){
     //Global functions
@@ -1553,11 +1558,11 @@ function animate(){
     enemy.update()
     player1.update()
     player1.position.x = player.position.x-70
-    player1.position.y = player.position.y-38
+    player1.position.y = player.position.y-30
     player2.update()
     player2.position.x = enemy.position.x-70
-    player2.position.y = enemy.position.y-38
-
+    player2.position.y = enemy.position.y-30
+    
     
     player1.previousFrame = player1.currentFrame.y
 
