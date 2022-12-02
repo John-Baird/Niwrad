@@ -628,13 +628,10 @@ class Pic{
         
       }
       if(this.previousFrame === this.currentFrame.y){
-        if(this === player2){
-          
-        }
       }
       else{
         if(this === player2){
-          // console.log("state change")
+          console.log("state change")
         }
         
         if(this.direction === 'right'){
@@ -1072,11 +1069,12 @@ class Sprite {
       
       if (this === player){
         player1.currentFrame.y = 1
-        player1.editR = 2
+        player1.editR = 0
         player1.framesHold = 3
         
       }
       if(this === enemy){
+        player2.previousFrame = player2.currentFrame.y
         player2.currentFrame.y = 1
         player2.editR = 0
         player2.framesHold = 3
@@ -1536,7 +1534,7 @@ function animate(){
   // Reseting the simulation
   player.attackBox.offset.y = 25
   enemy.attackBox.offset.y = 25
-
+  console.log(player2.currentFrame.x)
   window.requestAnimationFrame(animate)
   if(pause){
     //Global functions
