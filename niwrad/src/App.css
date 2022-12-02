@@ -263,3 +263,9 @@ color:red;
 .purplee:hover{
 color:purple;
 }
+
+body {
+  background-color: black;
+  margin-left:16.5%;
+  margin-top:6%;
+}
