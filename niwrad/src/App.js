@@ -706,14 +706,7 @@ const player1 = new Pic({
   framesHold: 20,
   editR: 2,
   editL: 0,
-  keybinds:{
-    left: 'a',
-    right: 'd',
-    jump: 'w',
-    crouch: 's',
-    attack: 'f',
-    block: 'g'
-  }
+
 })
 const player2 = new Pic({
   position:{
@@ -738,30 +731,23 @@ const player2 = new Pic({
   framesHold: 10,
   editR: 2,
   editL: 0,
-  keybinds:{
-    left: 'ArrowLeft',
-    right: 'ArrowRight',
-    jump: 'ArrowUp',
-    crouch: 'ArrowDown',
-    attack: 'm',
-    block: 'n'
-  }
+
 })
 
 
-//player1.keybinds.left
-//player1.keybinds.right
-// player1.keybinds.jump
-// player1.keybinds.crouch
-// player1.keybinds.attack
-// player1.keybinds.block
+//   player.keybinds.left
+//   player.keybinds.right
+//   player.keybinds.jump
+//   player.keybinds.crouch
+//   player.keybinds.attack
+//   player.keybinds.block
 
-// player2.keybinds.left
-// player2.keybinds.right
-// player2.keybinds.jump
-// player2.keybinds.crouch
-// player2.keybinds.attack
-// player2.keybinds.block
+//   enemy.keybinds.left
+//   enemy.keybinds.right
+// enemy.keybinds.jump
+// enemy.keybinds.crouch
+// enemy.keybinds.attack
+// enemy.keybinds.block
 
 
 // Sprite Creator
@@ -804,14 +790,7 @@ class Sprite {
     }
     this.state = state
     this.attka = attka
-    this.keybinds = {
-      left: '',
-      right: '',
-      jump: '',
-      crouch: '',
-      attack: '',
-      block: '',
-    }
+    this.keybinds = keybinds
     //this.reset = reset
   }
     //Draws out sprites and attack boxes
@@ -1246,7 +1225,15 @@ const player = new Sprite({
     x: 0,
     y: 50
   },
-  name: 'player'
+  name: 'player',
+  keybinds:{
+    left: 'a',
+    right: 'd',
+    jump: 'w',
+    crouch: 's',
+    attack: 'f',
+    block: 'g'
+  }
 })
 
 
@@ -1269,6 +1256,14 @@ const enemy = new Sprite({
     y: 0
   },
   name: 'enemy',
+  keybinds:{
+    left: 'ArrowLeft',
+    right: 'ArrowRight',
+    jump: 'ArrowUp',
+    crouch: 'ArrowDown',
+    attack: 'm',
+    block: 'n'
+  }
 })
 
 
@@ -1452,13 +1447,13 @@ function animate(){
 
     //Setting position and velocity boundaries for player
     if(player.canMoveLeft){
-      if (keys.a.pressed && player.lastKey === player1.keybinds.left){
+      if (keys.a.pressed && player.lastKey === player.keybinds.left){
         player.velocity.x += (-1 * player.speed)
       }
       
     }
     if(player.canMoveRight){
-      if (keys.d.pressed && player.lastKey === player1.keybinds.right){
+      if (keys.d.pressed && player.lastKey === player.keybinds.right){
         player.velocity.x += (1 * player.speed)
       }
     }
@@ -1471,12 +1466,12 @@ function animate(){
 
     //Setting position and velocity boundaries for enemy
     if(enemy.canMoveLeft){
-      if (keys.ArrowLeft.pressed && enemy.lastKey === player2.keybinds.left){
+      if (keys.ArrowLeft.pressed && enemy.lastKey === enemy.keybinds.left){
         enemy.velocity.x += (-1 * enemy.speed)
       }
     }
     if(enemy.canMoveRight){
-      if (keys.ArrowRight.pressed && enemy.lastKey === player2.keybinds.right){
+      if (keys.ArrowRight.pressed && enemy.lastKey === enemy.keybinds.right){
         enemy.velocity.x += (1 * enemy.speed)
       }
     }
@@ -1722,24 +1717,24 @@ window.addEventListener('keydown', (event) => {
     // player keys - setting the current downkey to last key pressed
 
     
-    case player1.keybinds.right:
+    case player.keybinds.right:
       keys.d.pressed = true
-      player.lastKey = player1.keybinds.right
+      player.lastKey = player.keybinds.right
       player.attackBox.offset.x = 0
       break
-    case player1.keybinds.left:
+    case player.keybinds.left:
         keys.a.pressed = true
-        player.lastKey = player1.keybinds.left
+        player.lastKey = player.keybinds.left
       player.attackBox.offset.x = -50
       break
-    case player1.keybinds.jump:
+    case player.keybinds.jump:
       if(player.canJump && !player.isBlocking){
         player.velocity.y = (-20 * jumpForce)
         player.canJump = false
       }
       
       break
-    case player1.keybinds.crouch:
+    case player.keybinds.crouch:
       
       if (player.canCrouch){
         player.isCrouching = true
@@ -1748,13 +1743,13 @@ window.addEventListener('keydown', (event) => {
       
       
       break
-      case player1.keybinds.attack:
+      case player.keybinds.attack:
         
         if (player.canAttack && !player.isBlocking){
           player.attack()
         }
       break
-      case player1.keybinds.block:
+      case player.keybinds.block:
         
         if(player.canJump){
           player.color = 'darkred'
@@ -1768,19 +1763,19 @@ window.addEventListener('keydown', (event) => {
       switch (event.key){
 
         //enemy keys - setting the current downkey to last key pressed
-        case player2.keybinds.right:
+        case enemy.keybinds.right:
           
           keys.ArrowRight.pressed = true
-          enemy.lastKey = player2.keybinds.right
+          enemy.lastKey = enemy.keybinds.right
           enemy.attackBox.offset.x = 0
         break
-        case player2.keybinds.left:
+        case enemy.keybinds.left:
           
           keys.ArrowLeft.pressed = true
-          enemy.lastKey = player2.keybinds.left
+          enemy.lastKey = enemy.keybinds.left
           enemy.attackBox.offset.x = -50
         break
-        case player2.keybinds.jump:
+        case enemy.keybinds.jump:
           
           if(enemy.canJump){
             enemy.velocity.y = (-20 * jumpForce)
@@ -1788,7 +1783,7 @@ window.addEventListener('keydown', (event) => {
           }
           
         break
-        case player2.keybinds.crouch:
+        case enemy.keybinds.crouch:
           
           if (enemy.canCrouch){
             enemy.isCrouching = true
@@ -1796,13 +1791,13 @@ window.addEventListener('keydown', (event) => {
           }
           
         break
-        case player2.keybinds.attack:
+        case enemy.keybinds.attack:
           
           if (enemy.canAttack && !enemy.isBlocking){
             enemy.attack()
           }
         break
-        case player2.keybinds.block:
+        case enemy.keybinds.block:
           
           if(enemy.canJump){
             enemy.color = 'darkblue'
@@ -1828,29 +1823,29 @@ window.addEventListener('keyup', (event) => {
     // Switching off current key
     // Switching the last key pressed to the opposite just incase
 
-    case player1.keybinds.right
+    case player.keybinds.right
       :
       keys.d.pressed = false
-      player.lastKey = player1.keybinds.left
+      player.lastKey = player.keybinds.left
     break
-    case player1.keybinds.left:
+    case player.keybinds.left:
       keys.a.pressed = false
-      player.lastKey = player1.keybinds.right
+      player.lastKey = player.keybinds.right
     break
-    // case player1.keybinds.crouch:
+    // case player.keybinds.crouch:
     //   player.canAttack = true
     //   break
-    case player1.keybinds.crouch:
+    case player.keybinds.crouch:
         player.isCrouching = false
         player.canCrouch = true
       
       
       
       break
-      case player1.keybinds.attack:
+      case player.keybinds.attack:
         
       break
-      case player1.keybinds.block:
+      case player.keybinds.block:
           player.color = 'red'
           player.isBlocking = false
       break
@@ -1863,27 +1858,27 @@ window.addEventListener('keyup', (event) => {
     //enemy
     // Switching off current key
     // Switching the last key pressed to the opposite just incase
-    case player2.keybinds.right:
+    case enemy.keybinds.right:
       keys.ArrowRight.pressed = false
-      enemy.lastKey = player2.keybinds.left
+      enemy.lastKey = enemy.keybinds.left
       
     break
-    case player2.keybinds.left:
+    case enemy.keybinds.left:
       keys.ArrowLeft.pressed = false
-      enemy.lastKey = player2.keybinds.right
+      enemy.lastKey = enemy.keybinds.right
     break
 
-    case player2.keybinds.crouch:
+    case enemy.keybinds.crouch:
       enemy.isCrouching = false
         enemy.canCrouch = true
 
       
           
     break
-    case player2.keybinds.attack:
+    case enemy.keybinds.attack:
       
     break
-    case player2.keybinds.block:
+    case enemy.keybinds.block:
       enemy.color = 'blue'
       enemy.isBlocking = false
     break
@@ -1908,22 +1903,22 @@ function vsAI () {
       if (enemy.position.x < player.position.x) {
         setTimeout(() => {
           keys.ArrowRight.pressed = true
-          enemy.lastKey = player2.keybinds.right
+          enemy.lastKey = enemy.keybinds.right
           enemy.attackBox.offset.x = 0
         } ,wait)
       } else {
         keys.ArrowRight.pressed = false
-        enemy.lastKey = player2.keybinds.left
+        enemy.lastKey = enemy.keybinds.left
       }
       if (enemy.position.x > player.position.x) {
         setTimeout(() => {
           keys.ArrowLeft.pressed = true
-          enemy.lastKey = player2.keybinds.left
+          enemy.lastKey = enemy.keybinds.left
           enemy.attackBox.offset.x = -50
         } ,wait)
       } else {
         keys.ArrowLeft.pressed = false
-        enemy.lastKey = player2.keybinds.right
+        enemy.lastKey = enemy.keybinds.right
       }
       if (enemy.position.y > player.position.y) {
         if(enemy.canJump){
