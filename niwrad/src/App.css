@@ -208,10 +208,12 @@
   flex-direction: row-reverse;
   align-items: center;
   height: 8vh;
+  justify-content: center;
 }
 
 button{
   margin-left: 1vw;
+  margin-right: 1vw;
   height: 40%;
   color: white;
   border-color: white;
@@ -220,4 +222,44 @@ button{
 }
 button:hover{
   border-style:solid
+}
+
+.strike{
+  text-decoration: line-through;
+}
+
+
+.dai{
+  
+    cursor: url(https://cur.cursors-4u.net/games/gam-10/gam948.ani), url(https://cur.cursors-4u.net/games/gam-10/gam948.png), auto !important;
+    background-color: black;
+    height: 576px;
+    width: 1024px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 200%;
+    color:white;
+    z-index: 6;
+  
+}
+
+.dai p{
+  margin: 0 10px;
+}
+
+.greenn:hover{
+color: lightgreen
+}
+.yelloww:hover{
+color: yellow;
+}
+.redd:hover{
+color:red;
+}
+.purplee:hover{
+color:purple;
 }

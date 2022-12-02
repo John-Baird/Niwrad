@@ -24,7 +24,7 @@ import RL1 from './img/red/RL1.png'
 
 import RR1 from './img/red/RR1.png'
 
-import { Button } from 'bootstrap';
+
 
 let P1RightColor = PR1
 let P1LeftColor = PL1
@@ -59,7 +59,12 @@ let max = 100
 
 
 function App() {
-
+  const [dai, setDai] = useState("");
+  const daiToggle = () => {
+    setDai(!dai);
+    
+    
+  };
   const [keybind, setKeybind] = useState("");
   const keybindToggle = () => {
     setKeybind(!keybind);
@@ -88,7 +93,7 @@ function App() {
   const [isActive, setActive] = useState("");
   const handleToggle = () => {
     setActive(!isActive);
-    console.log(isActive)
+    //console.log(isActive)
     
   };
   const [open, setOpen] = useState("");
@@ -121,28 +126,122 @@ function App() {
        break
     }
   })
+  window.addEventListener('keydown', (event) => {
   
+    if(keyChange){
+      if(keyWho === 'playerLeft'){
+        player.keybinds.left = event.key
+        keyChange = false
+        keyWho = ''
+        
+        
+      }
+      if(keyWho === 'playerRight'){
+        player.keybinds.right = event.key
+        keyChange = false
+        keyWho = ''
+      }
+      if(keyWho === 'playerJump'){
+        player.keybinds.jump = event.key
+        keyChange = false
+        keyWho = ''
+      }
+      if(keyWho === 'playerCrouch'){
+        player.keybinds.crouch = event.key
+        keyChange = false
+        keyWho = ''
+      }
+      if(keyWho === 'playerAttack'){
+        player.keybinds.attack = event.key
+        keyChange = false
+        keyWho = ''
+      }
+      if(keyWho === 'playerBlock'){
+        player.keybinds.block = event.key
+        keyChange = false
+        keyWho = ''
+      }
+
+
+
+      if(keyWho === 'enemyLeft'){
+        enemy.keybinds.left = event.key
+        keyChange = false
+        keyWho = ''
+      }
+      if(keyWho === 'enemyRight'){
+        enemy.keybinds.right = event.key
+        keyChange = false
+        keyWho = ''
+      }
+      if(keyWho === 'enemyJump'){
+        enemy.keybinds.jump = event.key
+        keyChange = false
+        keyWho = ''
+        
+      }
+      if(keyWho === 'enemyCrouch'){
+        enemy.keybinds.crouch = event.key
+        keyChange = false
+        keyWho = ''
+      }
+      if(keyWho === 'enemyAttack'){
+        enemy.keybinds.attack = event.key
+        keyChange = false
+        keyWho = ''
+      }
+      if(keyWho === 'enemyBlock'){
+        enemy.keybinds.block = event.key
+        keyChange = false
+        keyWho = ''
+        
+      }
+      
+    }
+    //console.log(event.key)
+  })
+
+  let keyChange = false
+  let keyWho = ''
+  
+
   return (
     <div className="App">
       <div className={keybind ? '' : 'hide'}>
         <div className='keybind'>
       <div className='col'>
-        <div className='row'><p>Player 1</p></div>
-        <div className='row'><button>edit</button><p>Jump</p></div>
-        <div className='row'><button>edit</button><p>Crouch</p></div>
-        <div className='row'><button>edit</button><p>Left</p></div>
-        <div className='row'><button>edit</button><p>Right</p></div>
-        <div className='row'><button>edit</button><p>Attack</p></div>
-        <div className='row'><button>edit</button><p>Block</p></div>
+        <div className='row'><p>Player 1</p><button  onClick={event => {player.keybinds = {
+    left: 'a',
+    right: 'd',
+    jump: 'w',
+    crouch: 's',
+    attack: 'f',
+    block: 'g'
+  }}}>reset</button></div>
+        <div className='row'><p>{player.keybinds.jump}</p>   <button   onClick={event => {keyChange = true; keyWho = 'playerJump'; }}  >edit</button><p>Jump</p></div>
+        <div className='row'><p>{player.keybinds.crouch}</p> <button onClick={event => {keyChange = true; keyWho = 'playerCrouch'}}  >edit</button><p>Crouch</p></div>
+        <div className='row'><p>{player.keybinds.left}</p>   <button   onClick={event => {keyChange = true; keyWho = 'playerLeft'}}  >edit</button><p>Left</p></div>
+        <div className='row'><p>{player.keybinds.right}</p>  <button  onClick={event => {keyChange = true; keyWho = 'playerRight'}}  >edit</button><p>Right</p></div>
+        <div className='row'><p>{player.keybinds.attack}</p> <button onClick={event => {keyChange = true; keyWho = 'playerAttack'}}  >edit</button><p>Attack</p></div>
+        <div className='row'><p>{player.keybinds.block}</p>  <button  onClick={event => {keyChange = true; keyWho = 'playerBlock'}}  >edit</button><p>Block</p></div>
       </div>
       <div className='col'>
-      <div className='row'><p>Player 2</p></div>
-        <div className='row'><button>edit</button><p>Jump</p></div>
-        <div className='row'><button>edit</button><p>Crouch</p></div>
-        <div className='row'><button>edit</button><p>Left</p></div>
-        <div className='row'><button>edit</button><p>Right</p></div>
-        <div className='row'><button>edit</button><p>Attack</p></div>
-        <div className='row'><button>edit</button><p>Block</p></div>
+      <div className='row'><p>Player 2</p><button  onClick={event => {enemy.keybinds = {
+    
+      left: 'ArrowLeft',
+      right: 'ArrowRight',
+      jump: 'ArrowUp',
+      crouch: 'ArrowDown',
+      attack: 'm',
+      block: 'n'
+    
+  }}}>reset</button></div>
+        <div className='row'> <p>{enemy.keybinds.jump}</p>   <button onClick={event => {keyChange = true; keyWho = 'enemyJump'; }} >edit</button><p>Jump</p></div>
+        <div className='row'> <p>{enemy.keybinds.crouch}</p> <button onClick={event => {keyChange = true; keyWho = 'enemyCrouch'}} >edit</button><p>Crouch</p></div>
+        <div className='row'> <p>{enemy.keybinds.left}</p>   <button onClick={event => {keyChange = true; keyWho = 'enemyLeft'}}   >edit</button><p>Left</p></div>
+        <div className='row'> <p>{enemy.keybinds.right}</p>  <button onClick={event => {keyChange = true; keyWho = 'enemyRight'}}  >edit</button><p>Right</p></div>
+        <div className='row'> <p>{enemy.keybinds.attack}</p> <button onClick={event => {keyChange = true; keyWho = 'enemyAttack'}} >edit</button><p>Attack</p></div>
+        <div className='row'> <p>{enemy.keybinds.block}</p>  <button onClick={event => {keyChange = true; keyWho = 'enemyBlock'}}  >edit</button><p>Block</p></div>
       </div>
 
         <div className='option'>
@@ -156,14 +255,17 @@ function App() {
 <div className={zaworldo ? '' : 'hide'}>
         <div className='zaworldo'>
           <div className='col'>
+            <div className='strike'>
       <div className="option">
-            <p>Speed</p>
+            <p>Speed: 5</p>
             
         </div>
         <div className="option">
-            <p>Gravity</p>
+            <p>Gravity: -9.8</p>
         </div>
         </div>
+        </div>
+        <div>Coming Soon!</div>
         
 
         <div className='option'>
@@ -232,8 +334,8 @@ function App() {
 
 <div className={howto ? '' : 'hide'}>
         <div className='howto'>
-      <p>Player 1 - 🤸Arrow Keys   🗡️F   🛡️G</p>
-      <p>Player 2 - 🤸WASD   🗡️M   🛡️N</p>
+      
+      <p>Smash ur keyboard a bunch, you'll eventually get it</p>
       <div className="option">
             <p onClick={event => {
           keybindToggle();
@@ -277,6 +379,9 @@ function App() {
 
 
 
+
+
+
       <div className={settings ? '' : 'hide'}>
         <div className='settings'>
       <div className="option">
@@ -306,6 +411,34 @@ function App() {
       </div>
 
 
+      <div className={dai ? '' : 'hide'}>
+        <div className='dai'>
+
+        <div className='row'>
+          <p onClick={event => {Diff = 1}} className='purplee'>Nightmare</p>
+          <p onClick={event => {Diff = 2}}className='redd'>Hard</p>
+          <p onClick={event => {Diff = 3}} className='yelloww'>Normal</p>
+          <p onClick={event => {Diff = 4}} className='greenn'>Easy</p>
+        </div>
+
+        <div className="option">
+            <p onClick={event => {
+              daiToggle();
+          handleToggle();
+          pauseScreen();
+          restart();
+          VsAI = true
+        }}>Start</p>
+            
+        </div>
+
+        <div className='option'>
+              <p onClick={event => {
+          daiToggle();
+        }}>Go Back</p>
+            </div>
+          </div>
+      </div>
 
 
       <div className={open ? '' : 'hide'}>
@@ -331,14 +464,13 @@ function App() {
           handleToggle();
           pauseScreen();
           restart();
+          VsAI = false
         }}> 2 Player</p>
           </div>
           <div className="option">
             <p onClick={event => {
-          handleToggle();
-          pauseScreen();
-          restart();
-          VsAI = true
+          daiToggle();
+          
         }}>Vs AI</p>
           </div>
           <div>
@@ -481,9 +613,6 @@ class Pic{
       // console.log(player2.currentFrame.y)
 
       if(this.previousFrame === this.currentFrame.y){
-        if(this === player1){
-          
-        }
       }
       else{
         if(this === player1){
@@ -949,7 +1078,7 @@ class Sprite {
       }
       if(this === enemy){
         player2.currentFrame.y = 1
-        player2.editR = 2
+        player2.editR = 0
         player2.framesHold = 3
       }
     }
@@ -960,30 +1089,33 @@ class Sprite {
         player1.currentFrame.y = 5
         player1.framesHold = 10
         if(player1.direction === 'left'){
-          player1.editR = 0
+          player1.editR = 4
           player1.editL = 5
          
         }
         if(player1.direction === 'right'){
-          player1.editR = 5
+          player1.editR = 4
           player1.editL = 0
           
+
 
         }
       }
       if(this === enemy){
         player2.currentFrame.y = 5
         player2.framesHold = 10
-        if(player1.direction === 'left'){
-          player1.editR = 0
-          player1.editL = 5 
+        if(player2.direction === 'left'){
+          player2.editR = 4
+          player2.editL = 5
+          
         }
-        if(player1.direction === 'right'){
-          player1.editL = 0
-          player1.editR = 5
+        if(player2.direction === 'right'){
+          player2.editL = 0
+          player2.editR = 4
         }
       }
     }
+    
     else if (this.position.x >= canvas.width && this.isFalling){
       this.state = 'slidingRight'
       
@@ -1555,6 +1687,7 @@ function animate(){
       rectangle2: player,
     }) && enemy.isAttacking)
       {
+
       enemy.isAttacking = false
       console.log("enemy attack sucessful")
       if (player.canJump){
@@ -1694,6 +1827,7 @@ function pauseScreen(){
   else{
     pause = true
   }
+  
 }
 
 
@@ -1708,7 +1842,7 @@ window.addEventListener('keydown', (event) => {
     // This is the pause
 
     case 'Escape':
-      console.log('hit esc')
+      //console.log('hit esc')
      pauseScreen()
      
      break
@@ -1764,6 +1898,9 @@ window.addEventListener('keydown', (event) => {
         
         if (player.canAttack && !player.isBlocking){
           player.attack()
+          
+          
+          
         }
       break
       case player.keybinds.block:
@@ -1920,6 +2057,7 @@ function vsAI () {
       if (Diff === 2) {min = 100; max = 500}
       if (Diff === 3) {min = 500; max = 1000}
       if (Diff === 4) {min = 1000; max = 1500}
+      //console.log(Diff)
         const wait = Math.random() * (max - min) + min;
       if (enemy.position.x < player.position.x) {
         setTimeout(() => {
