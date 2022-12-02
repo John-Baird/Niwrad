@@ -59,6 +59,13 @@ let ShopVar = s
 
 
 function App() {
+
+  const [zaworldo, setZaworldo] = useState("");
+  const zaworldoToggle = () => {
+    setZaworldo(!zaworldo);
+    
+    
+  };
   const [custom, setCustom] = useState("");
   const customToggle = () => {
     setCustom(!custom);
@@ -110,7 +117,28 @@ function App() {
   })
   return (
     <div className="App">
-onClick={event => {}}
+
+
+<div className={zaworldo ? '' : 'hide'}>
+        <div className='zaworldo'>
+          <div className='col'>
+      <div className="option">
+            <p>Speed</p>
+        </div>
+        <div className="option">
+            <p>Gravity</p>
+        </div>
+        </div>
+        
+
+        <div className='option'>
+              <p onClick={event => {
+          zaworldoToggle();
+        }}>Go Back</p>
+            </div>
+          </div>
+      </div>
+
 
 <div className={custom ? '' : 'hide'}>
         <div className='custom'>
@@ -171,7 +199,9 @@ onClick={event => {}}
         <div className='howto'>
       <p>Player 1 - 🤸Arrow Keys   🗡️F   🛡️G</p>
       <p>Player 2 - 🤸WASD   🗡️M   🛡️N</p>
-
+      <div className="option">
+            <p>Keybinds</p>
+        </div>
         <div className='option'>
               <p onClick={event => {
           howtoToggle();
@@ -224,7 +254,10 @@ onClick={event => {}}
         </div>
 
         <div className="option">
-            <p>World Customization</p>
+            <p onClick={event => {
+          zaworldoToggle();
+        }}>World Customization</p>
+            
         </div>
 
         <div className='option'>
