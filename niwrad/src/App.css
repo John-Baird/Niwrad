@@ -152,15 +152,16 @@
   flex-direction: column;
 }
 
-.red{
-  color:red !important;
+
+.red:hover{
+  color:red 
 }
-.blue{
-  color:blue !important;
+.blue:hover{
+  color:blue 
 }
-.purple{
-  color:purple !important;
+.purple:hover{
+  color:purple 
 }
-.green{
-  color:green !important;
+.green:hover{
+  color:green 
 }

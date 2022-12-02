@@ -110,29 +110,53 @@ function App() {
   })
   return (
     <div className="App">
-
+onClick={event => {}}
 
 <div className={custom ? '' : 'hide'}>
         <div className='custom'>
       <div className="option">
         <div className='coll'>
             <p>Player 1 Color</p>
-            <p className='red'>Red</p>
-            <p className='blue'>Blue</p>
-            <p className='purple'>Purple</p>
-            <p className='green'>Green</p>
+            <p onClick={event => {
+              P1RightColor = RR1
+              P1LeftColor = RL1
+              }} className='red'>Red</p>
+            <p onClick={event => {
+              P1RightColor = BR1
+              P1LeftColor = BL1
+              }}className='blue'>Blue</p>
+            <p onClick={event => {
+              P1RightColor = PR1
+              P1LeftColor = PL1
+              }} className='purple'>Purple</p>
+            <p onClick={event => {
+              P1RightColor = GR1
+              P1LeftColor = GL1
+              }}className='green'>Green</p>
             </div>
         </div>
         <div className="option">
         <div className='coll'>
-            <p>Player 2 Color</p>
-            <p className='red'>Red</p>
-            <p className='blue'>Blue</p>
-            <p className='purple'>Purple</p>
-            <p className='green'>Green</p>
+        <p>Player 2 Color</p>
+            <p onClick={event => {
+              P2RightColor = RR1
+              P2LeftColor = RL1
+              }} className='red'>Red</p>
+            <p onClick={event => {
+              P2RightColor = BR1
+              P2LeftColor = BL1
+              }}className='blue'>Blue</p>
+            <p onClick={event => {
+              P2RightColor = PR1
+              P2LeftColor = PL1
+              }} className='purple'>Purple</p>
+            <p onClick={event => {
+              P2RightColor = GR1
+              P2LeftColor = GL1
+              }}className='green'>Green</p>
             </div>
         </div>
-        <p onClick={event => {
+        <p className='option' onClick={event => {
           customToggle();
         }}>Go Back</p>
             </div>
