@@ -35,6 +35,11 @@ let P2LeftColor = GL1
 let BackgroundVar = bg
 let ShopVar = s
 
+let Diff = 1
+
+let min = 10
+let max = 100
+
 //TODO
 
 
@@ -1400,7 +1405,6 @@ function animate(){
   if(pause){
     //Global functions
     friction()
-  
 
     
     
@@ -1908,7 +1912,11 @@ window.addEventListener('keyup', (event) => {
 function vsAI () {
   if (VsAI) {
     if (pause) {
-        const wait = Math.random() * (1000 - 100) + 100;
+      if (Diff === 1) {min = 0; max = 10}
+      if (Diff === 2) {min = 100; max = 500}
+      if (Diff === 3) {min = 500; max = 1000}
+      if (Diff === 4) {min = 1000; max = 1500}
+        const wait = Math.random() * (max - min) + min;
       if (enemy.position.x < player.position.x) {
         setTimeout(() => {
           keys.ArrowRight.pressed = true
