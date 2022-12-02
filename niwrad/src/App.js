@@ -7,25 +7,40 @@ import bg from './img/background.png'
 
 import s from './img/shop.png'
 
-import red from './img/char_red_1.png'
-
 import PL2 from './img/purple/PL2.png'
 import PL1 from './img/purple/PL1.png'
 
 import PR1 from './img/purple/PR1.png'
 import PR2 from './img/purple/PR2.png'
+
+import BL1 from './img/blue/BL1.png'
+
+import BR1 from './img/blue/BR1.png'
+import BR2 from './img/blue/BR2.png'
+
+import GL1 from './img/green/GL1.png'
+
+import GR1 from './img/green/GR1.png'
+import GR2 from './img/green/GR2.png'
+
+import RL1 from './img/red/RL1.png'
+
+import RR1 from './img/red/RR1.png'
+import RR2 from './img/red/RR2.png'
+
 import { Button } from 'bootstrap';
 
+let P1RightColor = PR1
+let P1LeftColor = PL1
 
+let P2RightColor = GR1
+let P2LeftColor = GL1
 
-// Settings - World rules - keybinds - Audio/Customization
-// About me
-
+let BackgroundVar = bg
+let ShopVar = s
 
 //TODO
-// Add blocking
-// Add current state of player/enemy
-// Add animations according to the state
+
 
 //TODO Fix animation - (on state change, set the current.frame.x to the starting frame (editR)    &  fix ending if else statement)
 // state change - correct direction on knockback hit - attack stopping short on hit
@@ -118,8 +133,8 @@ const jumpForce = .8
 // This is the pause
 let pause = true
 
-let VsAI = false
-let VsHuman = true
+let VsAI = true
+let VsHuman = false
 
 //Image Creator WIP
 
@@ -180,28 +195,46 @@ class Pic{
 
 
       this.framesElapsed++
-      // if(this.direction == 'left' && this.currentFrame.x < this.editR){
+      // if(this.direction === 'left' && this.currentFrame.x < this.editR){
       //   this.currentFrame.x = this.editR
       // }
       // console.log("prev")
-      // console.log(playerBlue.previousFrame)
+      // console.log(player2.previousFrame)
       // console.log("current")
-      // console.log(playerBlue.currentFrame.y)
+      // console.log(player2.currentFrame.y)
 
-      if(this.previousFrame == this.currentFrame.y){
-        if(this == playerRed){
+      if(this.previousFrame === this.currentFrame.y){
+        if(this === player1){
           
         }
       }
       else{
-        if(this == playerRed){
-          console.log("state change")
+        if(this === player1){
+          // console.log("state change")
         }
         
-        if(this.direction == 'right'){
+        if(this.direction === 'right'){
           this.currentFrame.x = 0
         }
-        else if(this.direction == 'left'){
+        else if(this.direction === 'left'){
+          this.currentFrame.x = 7
+        }
+        
+      }
+      if(this.previousFrame === this.currentFrame.y){
+        if(this === player2){
+          
+        }
+      }
+      else{
+        if(this === player2){
+          // console.log("state change")
+        }
+        
+        if(this.direction === 'right'){
+          this.currentFrame.x = 0
+        }
+        else if(this.direction === 'left'){
           this.currentFrame.x = 7
         }
         
@@ -209,31 +242,31 @@ class Pic{
       if (this.framesElapsed % (this.framesHold) === 0){
 
 
-        if(this == playerRed){
-          if(player.state == 'blocking'){
-            if(this.direction == 'left'){
+        if(this === player1){
+          if(player.state === 'blocking'){
+            if(this.direction === 'left'){
               this.currentFrame.x --
               if ((this.currentFrame.x)  <= this.editL){
                 this.currentFrame.x = 6
               }
               
             }
-            if(this.direction == 'right'){
+            if(this.direction === 'right'){
               this.currentFrame.x ++
               if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
                 this.currentFrame.x = 1
               }
             }
           }
-          else if(player.state == 'dying'){
-            if(this.direction == 'left'){
+          else if(player.state === 'dying'){
+            if(this.direction === 'left'){
               this.currentFrame.x --
               if ((this.currentFrame.x)  <= this.editL){
                 this.currentFrame.x = 4
               }
               
             }
-            if(this.direction == 'right'){
+            if(this.direction === 'right'){
               this.currentFrame.x ++
               if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
                 this.currentFrame.x = 3
@@ -241,13 +274,13 @@ class Pic{
             }
           }
           else{
-            if(this.direction == 'left'){
+            if(this.direction === 'left'){
               this.currentFrame.x --
               if ((this.currentFrame.x)  <= this.editL){
                 this.currentFrame.x = 7
               }
             }
-            if(this.direction == 'right'){
+            if(this.direction === 'right'){
               this.currentFrame.x ++
               if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
                 this.currentFrame.x = 0
@@ -255,14 +288,61 @@ class Pic{
             }
           }
           }
-          if(this == background || this == playerBlue){
-            if(this.direction == 'left'){
+          
+          if(this === player2){
+            if(enemy.state === 'blocking'){
+              if(this.direction === 'left'){
+                this.currentFrame.x --
+                if ((this.currentFrame.x)  <= this.editL){
+                  this.currentFrame.x = 6
+                }
+                
+              }
+              if(this.direction === 'right'){
+                this.currentFrame.x ++
+                if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                  this.currentFrame.x = 1
+                }
+              }
+            }
+            else if(enemy.state === 'dying'){
+              if(this.direction === 'left'){
+                this.currentFrame.x --
+                if ((this.currentFrame.x)  <= this.editL){
+                  this.currentFrame.x = 4
+                }
+                
+              }
+              if(this.direction === 'right'){
+                this.currentFrame.x ++
+                if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                  this.currentFrame.x = 3
+                }
+              }
+            }
+            else{
+              if(this.direction === 'left'){
+                this.currentFrame.x --
+                if ((this.currentFrame.x)  <= this.editL){
+                  this.currentFrame.x = 7
+                }
+              }
+              if(this.direction === 'right'){
+                this.currentFrame.x ++
+                if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
+                  this.currentFrame.x = 0
+                }
+              }
+            }
+          }
+          if(this === background){
+            if(this.direction === 'left'){
               this.currentFrame.x --
               if ((this.currentFrame.x)  <= this.editL){
                 this.currentFrame.x = 7
               }
             }
-            if(this.direction == 'right'){
+            if(this.direction === 'right'){
               this.currentFrame.x ++
               if ((this.currentFrame.x)  >= this.framesMax.x - this.editR){
                 this.currentFrame.x = 0
@@ -270,7 +350,7 @@ class Pic{
             }
           }
 
-          
+
         
         
       }
@@ -285,7 +365,7 @@ const background = new Pic({
     x: 0,
     y: 5
   },
-  imageSrc: bg, 
+  imageSrc: BackgroundVar, 
   width: canvas.width,
   height: canvas.height,
   scale:{
@@ -308,7 +388,7 @@ const shop = new Pic({
     y: 100
 
   },
-  imageSrc: s,
+  imageSrc: ShopVar,
   width: 2000,
   
   height: 400,
@@ -327,12 +407,12 @@ const shop = new Pic({
 })
 
 
-const playerRed = new Pic({
+const player1 = new Pic({
   position:{
     x: 100,
     y: 100
   },
-  imageSrc: PR1, 
+  imageSrc:P1RightColor, 
   width: 800,
   height: 800,
   scale:{
@@ -351,12 +431,12 @@ const playerRed = new Pic({
   editR: 2,
   editL: 0
 })
-const playerBlue = new Pic({
+const player2 = new Pic({
   position:{
     x: 100,
     y: 100
   },
-  imageSrc: red, 
+  imageSrc: P2RightColor, 
   width: 800,
   height: 800,
   scale:{
@@ -469,7 +549,7 @@ class Sprite {
         this.velocity.y += gravity
       }
       if (this.position.x + this.width >= canvas.width ){
-        console.log(this.name +" is out of bounds right")
+        // console.log(this.name +" is out of bounds right")
         this.canMoveRight = false
         this.velocity.x = 0
       }
@@ -477,7 +557,7 @@ class Sprite {
         this.canMoveRight = true
       }
       if (this.position.x <= 0){
-        console.log(this.name +" is out of bounds left")
+        // console.log(this.name +" is out of bounds left")
         this.canMoveLeft = false
         this.velocity.x = 0
         
@@ -498,258 +578,299 @@ class Sprite {
     let state = ['idle','normal attack','critical attack', 'jumping up', 'falling down', 'sliding down wall', 'knocked', 'blocking', 'crouching', 'stunned', 'dying', 'running']
     
     
-    console.log(playerRed.currentFrame.x + " first")
 
     if(player.velocity.x > 0){
-      playerRed.image.src = PR1
-      playerRed.direction = 'right'
-      
+      player1.image.src =P1RightColor
+      player1.direction = 'right' 
     }
     if(player.velocity.x < 0){
-      playerRed.image.src = PL1
-      playerRed.direction = 'left'
-      
+      player1.image.src = P1LeftColor
+      player1.direction = 'left'
     }
-    if(playerRed.previousFrame !== playerRed.currentFrame.y){
-      if(this.direction == 'right'){
+    if(enemy.velocity.x > 0){
+      player2.image.src =P2RightColor
+      player2.direction = 'right' 
+    }
+    if(enemy.velocity.x < 0){
+      player2.image.src = P2LeftColor
+      player2.direction = 'left'
+    }
+    if(player1.previousFrame !== player1.currentFrame.y){
+      if(this.direction === 'right'){
         this.currentFrame.x = 0
       }
-      else if(this.direction == 'left'){
+      else if(this.direction === 'left'){
         this.currentFrame.x = 7
       }
     }
+    
     else{
     
     if(!this.alive){
       this.state = 'dying'
       
-      if (this == player){
-        playerRed.currentFrame.y = 6
-        playerRed.editR = 0
-        playerRed.framesHold = 10
+      if (this === player){
+        player1.currentFrame.y = 6
+        player1.editR = 0
+        player1.framesHold = 10
         
       }
-      if(this == enemy){
-        playerBlue.currentFrame.y = 6
-        playerBlue.editR = 0
-        playerBlue.framesHold = 10
+      if(this === enemy){
+        player2.currentFrame.y = 6
+        player2.editR = 0
+        player2.framesHold = 10
       }
     }
     else if(this.isAttacking && this.isFalling){
       this.state = 'critAttk'
       
-      if (this == player){
+      if (this === player){
         
       }
-      if(this == enemy){
+      if(this === enemy){
 
       }
     }
     else if(this.attka){
       this.state = 'normAttk'
       
-      if (this == player){
-        playerRed.currentFrame.y = 1
-        playerRed.editR = 2
-        playerRed.framesHold = 3
+      if (this === player){
+        player1.currentFrame.y = 1
+        player1.editR = 2
+        player1.framesHold = 3
         
       }
-      if(this == enemy){
-        playerBlue.currentFrame.y = 1
-        playerBlue.editR = 2
-        playerBlue.framesHold = 3
+      if(this === enemy){
+        player2.currentFrame.y = 1
+        player2.editR = 2
+        player2.framesHold = 3
       }
     }
     else if(this.isStunned){
       this.state = 'knocked'
       
-      if (this == player){
-        playerRed.currentFrame.y = 5
-        playerRed.framesHold = 10
-        if(playerRed.direction == 'left'){
-          playerRed.editR = 0
-          playerRed.editL = 5
+      if (this === player){
+        player1.currentFrame.y = 5
+        player1.framesHold = 10
+        if(player1.direction === 'left'){
+          player1.editR = 0
+          player1.editL = 5
          
         }
-        if(playerRed.direction == 'right'){
-          playerRed.editR = 5
-          playerRed.editL = 0
+        if(player1.direction === 'right'){
+          player1.editR = 5
+          player1.editL = 0
           
 
         }
       }
-      if(this == enemy){
-        playerBlue.currentFrame.y = 5
-        playerBlue.editR = 5
-        playerBlue.framesHold = 10
+      if(this === enemy){
+        player2.currentFrame.y = 5
+        player2.framesHold = 10
+        if(player1.direction === 'left'){
+          player1.editR = 0
+          player1.editL = 5 
+        }
+        if(player1.direction === 'right'){
+          player1.editL = 0
+          player1.editR = 5
+        }
       }
     }
     else if (this.position.x >= canvas.width && this.isFalling){
       this.state = 'slidingRight'
       
-      if (this == player){
+      if (this === player){
         
       }
-      if(this == enemy){
+      if(this === enemy){
 
       }
     }
     else if (this.position.x <= 0 && this.isFalling){
       this.state = 'slidingLeft'
       
-      if (this == player){
+      if (this === player){
         
       }
-      if(this == enemy){
+      if(this === enemy){
 
       }
     }
     else if(this.isFalling){
       this.state = 'falling down'
       
-      if (this == player){
-        playerRed.currentFrame.y = 4
-        playerRed.editR = 0
-        playerRed.framesHold = 8
+      if (this === player){
+        player1.currentFrame.y = 4
+        player1.editR = 0
+        player1.framesHold = 8
         
       }
-      if(this == enemy){
-        playerBlue.currentFrame.y = 4
-        playerBlue.editR = 0
-        playerBlue.framesHold = 8
+      if(this === enemy){
+        player2.currentFrame.y = 4
+        player2.editR = 0
+        player2.framesHold = 8
       }
     }
     else if(this.velocity.y < 0){
       this.state = 'jumping up'
       
-      if (this == player){
-        playerRed.currentFrame.y = 3
-        
-        playerRed.framesHold = 8
-        if(playerRed.direction == 'left'){
-          playerRed.editR = 0
-          playerRed.editL = 2
+      if (this === player){
+        player1.currentFrame.y = 3
+        player1.framesHold = 8
+        if(player1.direction === 'left'){
+          player1.editR = 0
+          player1.editL = 2
           
         }
-        if(playerRed.direction == 'right'){
-          playerRed.editR = 2
-          playerRed.editL = 0
+        if(player1.direction === 'right'){
+          player1.editR = 2
+          player1.editL = 0
           
 
         }
       }
-      if(this == enemy){
-        playerBlue.currentFrame.y = 3
-        playerBlue.editR = 2
-        playerBlue.framesHold = 8
+      if(this === enemy){
+        player2.currentFrame.y = 3
+        player2.framesHold = 8
+        if(player2.direction === 'left'){
+          player2.editR = 0
+          player2.editL = 2  
+        }
+        if(player2.direction === 'right'){
+          player2.editL = 0
+          player2.editR = 2
+        }
       }
     }
     else if(this.isBlocking){
       this.state = 'blocking'
       
-      if (this == player){
-        playerRed.currentFrame.y = 10
-        playerRed.framesHold = 10
-        if(playerRed.direction == 'left'){
-          playerRed.editR = 0
-          playerRed.editL = 4
+      if (this === player){
+        player1.currentFrame.y = 10
+        player1.framesHold = 10
+        if(player1.direction === 'left'){
+          player1.editR = 0
+          player1.editL = 4
           
         }
-        if(playerRed.direction == 'right'){
-          playerRed.editR = 5
-          playerRed.editL = 0
+        if(player1.direction === 'right'){
+          player1.editR = 5
+          player1.editL = 0
           
 
         }
       }
-      if(this == enemy){
-        playerBlue.currentFrame.y = 10
-        playerBlue.editR = 5
-        playerBlue.framesHold = 10
+      if(this === enemy){
+        player2.currentFrame.y = 10
+        player2.framesHold = 10
+        if(player2.direction === 'left'){
+          player2.editR = 0
+          player2.editL = 4
+        }
+        if(player2.direction === 'right'){
+          player2.editL = 0
+          player2.editR = 5
+        }
       }
     }
     else if (this.isCrouching){
       this.state = 'crouching'
       
-      if (this == player){
-        playerRed.currentFrame.y = 9
+      if (this === player){
+        player1.currentFrame.y = 9
         
-        playerRed.framesHold = 10
-        if(playerRed.direction == 'left'){
-          playerRed.editR = 0
-          playerRed.editL = 5
+        player1.framesHold = 10
+        if(player1.direction === 'left'){
+          player1.editR = 0
+          player1.editL = 5
           
         }
-        if(playerRed.direction == 'right'){
-          playerRed.editR = 5
-          playerRed.editL = 0
+        if(player1.direction === 'right'){
+          player1.editR = 5
+          player1.editL = 0
           
 
         }
       }
-      if(this == enemy){
-        playerBlue.currentFrame.y = 9
-        playerBlue.editR = 5
-        playerBlue.framesHold = 10
+      if(this === enemy){
+        player2.currentFrame.y = 9
+        player2.framesHold = 10
+        if(player2.direction === 'left'){
+          player2.editR = 0
+          player2.editL = 5  
+        }
+        if(player2.direction === 'right'){
+          player2.editL = 0
+          player2.editR = 5
+        }
       }
     }
     else if(this.velocity.x !== 0){
       this.state = 'running'
       
-      if (this == player){
-        playerRed.currentFrame.y = 2
-        playerRed.editR = 0
-        playerRed.framesHold = 6
+      if (this === player){
+        player1.currentFrame.y = 2
+        player1.editR = 0
+        player1.framesHold = 6
         
       }
-      if(this == enemy){
-        playerBlue.currentFrame.y = 2
-        playerBlue.editR = 0
-        playerBlue.framesHold = 6
+      if(this === enemy){
+        player2.currentFrame.y = 2
+        player2.editR = 0
+        player2.framesHold = 6
       }
     }
-    else if(this.velocity.x == 0 && this.velocity.y == 0 && player.alive){
+    else if(this.velocity.x === 0 && this.velocity.y === 0 && player.alive){
         this.state = 'idle'
-        playerRed.previousFrame = playerRed.currentFrame.y
-        playerBlue.previousFrame = playerBlue.currentFrame.y
+        player1.previousFrame = player1.currentFrame.y
+        player2.previousFrame = player2.currentFrame.y
         if (this === player){
-          playerRed.currentFrame.y = 0
+          player1.currentFrame.y = 0
           
-          playerRed.framesHold = 10
-          if(playerRed.direction === 'left'){
-            playerRed.editR = 0
-            playerRed.editL = 2
+          player1.framesHold = 10
+          if(player1.direction === 'left'){
+            player1.editR = 0
+            player1.editL = 2
             
           }
-          if(playerRed.direction === 'right'){
-            playerRed.editL = 0
-            playerRed.editR = 2
+          if(player1.direction === 'right'){
+            player1.editL = 0
+            player1.editR = 2
             
 
           }
         }
         if(this === enemy){
-          playerBlue.currentFrame.y = 0
-          playerBlue.editR = 2
-          playerBlue.framesHold = 10
+          player2.currentFrame.y = 0
+          player2.framesHold = 10
+          if(player2.direction === 'left'){
+            player2.editR = 0
+            player2.editL = 2  
+          }
+          if(player2.direction === 'right'){
+            player2.editL = 0
+            player2.editR = 2
+          }
         }
       }
     
       //console.log(this.state)
 
     }
-    console.log(playerRed.currentFrame.x + " second")
+    
   }
     //attack lasts .1 seconds
     attack() {
       
       this.isAttacking = true
       this.canAttack = false
-      this.attka = true
       setTimeout(() => {
         this.isAttacking = false
-        this.attka = false
       }, 300)
+      
+      
+      
     }
 
     // Stunned
@@ -983,7 +1104,7 @@ function animate(){
     playerBlue.position.y = enemy.position.y-30
 
     
-    playerRed.previousFrame = playerRed.currentFrame.y
+    player1.previousFrame = player1.currentFrame.y
 
     
     
@@ -1154,7 +1275,7 @@ function animate(){
     }
 
   }
-  //vsAI()
+  vsAI()
 
  if(FirstLoad){
   pauseScreen()
@@ -1197,8 +1318,8 @@ function restart(){
     enemy.velocity.x = 0
     enemy.velocity.y = 0
     enemyBar.position.x = (canvas.width*.6)-(canvas.width*0.05)
-    player.canAttack = false
-    enemy.canAttack = false
+    player.canAttack = true
+    enemy.canAttack = true
     timer = 100
     pause = true
     
@@ -1269,12 +1390,7 @@ window.addEventListener('keydown', (event) => {
 
     case 'Escape':
       console.log('hit esc')
-     if (pause){
-       pause = false
-     }
-     else{
-       pause = true
-     }
+     pauseScreen()
      break
       
     case ' ':
@@ -1283,11 +1399,13 @@ window.addEventListener('keydown', (event) => {
           restart()
         }
       break
+      //DEBUG//
       case 'p':
-        console.log(playerRed)
-        console.log(playerRed.currentFrame)
+        console.log(player1)
+        console.log(player1.currentFrame)
         console.log(pause)
       break
+      //DEBUG//
   }
   if (pause){
     if(player.alive && !player.isStunned){
@@ -1478,26 +1596,35 @@ window.addEventListener('keyup', (event) => {
 function vsAI () {
   if (VsAI) {
     if (pause) {
+        const wait = Math.random() * (1000 - 100) + 100;
       if (enemy.position.x < player.position.x) {
-        keys.ArrowRight.pressed = true
-        enemy.lastKey = 'ArrowRight'
-        enemy.attackBox.offset.x = 0
+        setTimeout(() => {
+          keys.ArrowRight.pressed = true
+          enemy.lastKey = 'ArrowRight'
+          enemy.attackBox.offset.x = 0
+        } ,wait)
       } else {
         keys.ArrowRight.pressed = false
         enemy.lastKey = 'ArrowLeft'
       }
       if (enemy.position.x > player.position.x) {
-        keys.ArrowLeft.pressed = true
-        enemy.lastKey = 'ArrowLeft'
-        enemy.attackBox.offset.x = -50
+        setTimeout(() => {
+          keys.ArrowLeft.pressed = true
+          enemy.lastKey = 'ArrowLeft'
+          enemy.attackBox.offset.x = -50
+        } ,wait)
       } else {
         keys.ArrowLeft.pressed = false
         enemy.lastKey = 'ArrowRight'
       }
-      if (enemy.position.y > player.position.y +100) {
+      if (enemy.position.y > player.position.y) {
         if(enemy.canJump){
           enemy.velocity.y = (-20 * jumpForce)
           enemy.canJump = false
+          setTimeout(() => {
+            enemy.velocity.y = (-20 * jumpForce)
+            enemy.canJump = false
+          } ,wait)
         }
       }
       if (enemy.position.x - player.position.x <= 50 && enemy.position.y - player.position.y <= 50) {
