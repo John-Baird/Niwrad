@@ -625,6 +625,12 @@ class Pic{
               }
             }
           }
+          if (this === shop) {
+            this.currentFrame.x --
+            if ((this.currentFrame.x)  <= this.editL){
+              this.currentFrame.x = 5
+          }
+        }
 
 
         
@@ -679,7 +685,10 @@ const shop = new Pic({
   currentFrame:{
     x: 0,
     y: 0
-  }
+  },
+  editL: 0,
+  editR: 0,
+  framesHold: 8
 })
 
 
