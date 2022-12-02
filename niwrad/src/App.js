@@ -1167,13 +1167,16 @@ class Sprite {
     }
     
   }
-    //attack lasts .1 seconds
+    //attack lasts .3 seconds
     attack() {
       
       this.isAttacking = true
       this.canAttack = false
+      this.attka = true
       setTimeout(() => {
+        this.attka = false
         this.isAttacking = false
+        
       }, 300)
       
       
