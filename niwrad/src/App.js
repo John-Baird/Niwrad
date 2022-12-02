@@ -59,7 +59,12 @@ let ShopVar = s
 
 
 function App() {
-
+  const [custom, setCustom] = useState("");
+  const customToggle = () => {
+    setCustom(!custom);
+    
+    
+  };
   
   const [howto, setHowto] = useState("");
   const howtoToggle = () => {
@@ -105,6 +110,38 @@ function App() {
   })
   return (
     <div className="App">
+
+
+<div className={custom ? '' : 'hide'}>
+        <div className='custom'>
+      <div className="option">
+        <div className='coll'>
+            <p>Player 1 Color</p>
+            <p className='red'>Red</p>
+            <p className='blue'>Blue</p>
+            <p className='purple'>Purple</p>
+            <p className='green'>Green</p>
+            </div>
+        </div>
+        <div className="option">
+        <div className='coll'>
+            <p>Player 2 Color</p>
+            <p className='red'>Red</p>
+            <p className='blue'>Blue</p>
+            <p className='purple'>Purple</p>
+            <p className='green'>Green</p>
+            </div>
+        </div>
+        <p onClick={event => {
+          customToggle();
+        }}>Go Back</p>
+            </div>
+
+      </div>
+
+
+
+
 
 <div className={howto ? '' : 'hide'}>
         <div className='howto'>
@@ -152,7 +189,9 @@ function App() {
       <div className={settings ? '' : 'hide'}>
         <div className='settings'>
       <div className="option">
-            <p>Character Customization</p>
+            <p onClick={event => {
+          customToggle();
+        }}>Character Customization</p>
         </div>
         <div className="option">
             <p onClick={event => {
