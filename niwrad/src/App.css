@@ -201,3 +201,23 @@
   color:white;
   z-index: 10;
 }
+
+
+.row{
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  height: 8vh;
+}
+
+button{
+  margin-left: 1vw;
+  height: 40%;
+  color: white;
+  border-color: white;
+  background-color: black;
+  border-style:dashed
+}
+button:hover{
+  border-style:solid
+}

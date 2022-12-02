@@ -116,27 +116,28 @@ function App() {
        break
     }
   })
+  
   return (
     <div className="App">
       <div className={keybind ? '' : 'hide'}>
         <div className='keybind'>
       <div className='col'>
-        <p>Player 1</p>
-        <p>Jump</p>
-        <p>Crouch</p>
-        <p>Left</p>
-        <p>Right</p>
-        <p>Attack</p>
-        <p>Block</p>
+        <div className='row'><p>Player 1</p></div>
+        <div className='row'><button>edit</button><p>Jump</p></div>
+        <div className='row'><button>edit</button><p>Crouch</p></div>
+        <div className='row'><button>edit</button><p>Left</p></div>
+        <div className='row'><button>edit</button><p>Right</p></div>
+        <div className='row'><button>edit</button><p>Attack</p></div>
+        <div className='row'><button>edit</button><p>Block</p></div>
       </div>
       <div className='col'>
-      <p>Player 2</p>
-        <p>Jump</p>
-        <p>Crouch</p>
-        <p>Left</p>
-        <p>Right</p>
-        <p>Attack</p>
-        <p>Block</p>
+      <div className='row'><p>Player 2</p></div>
+        <div className='row'><button>edit</button><p>Jump</p></div>
+        <div className='row'><button>edit</button><p>Crouch</p></div>
+        <div className='row'><button>edit</button><p>Left</p></div>
+        <div className='row'><button>edit</button><p>Right</p></div>
+        <div className='row'><button>edit</button><p>Attack</p></div>
+        <div className='row'><button>edit</button><p>Block</p></div>
       </div>
 
         <div className='option'>
@@ -1705,12 +1706,12 @@ window.addEventListener('keydown', (event) => {
      
      break
       
-    case ' ':
-        if (pause){
+    // case ' ':
+    //     if (pause){
 
-          restart()
-        }
-      break
+    //       restart()
+    //     }
+    //   break
       //DEBUG//
       case 'p':
         console.log(player1)
